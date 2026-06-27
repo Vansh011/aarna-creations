@@ -1,6 +1,6 @@
 import type { Product } from "@/types";
 
-export const products: Product[] = [
+const legacyProducts: any[] = [
   {
     id: "1",
     slug: "emerald-silk-kurti",
@@ -416,6 +416,23 @@ export const products: Product[] = [
   },
 ];
 
+export const products: Product[] = legacyProducts.map((product) => ({
+  id: product.id,
+  slug: product.slug,
+  name: product.name,
+  discountedPrice: product.price,
+  mainPrice: product.originalPrice ?? product.price,
+  images: product.images,
+  category: product.category,
+  subcategory: product.occasion,
+  sizes: product.sizes,
+  color: product.colors.join(", "),
+  fabricMaterial: product.fabric,
+  description: product.description,
+  createdAt: product.createdAt,
+  updatedAt: product.createdAt,
+}));
+
 export const categories = [
   "Kurtis",
   "Suit Sets",
@@ -436,10 +453,10 @@ export const fabrics = [
 
 export const occasions = ["Casual", "Festive", "Wedding", "Office"] as const;
 
-export const sizes = ["XS", "S", "M", "L", "XL", "XXL"] as const;
+export const sizes = ["XS", "S", "M", "L", "XL", "XXL", "3XL", "4XL", "5XL", "Free Size", "Oversized"] as const;
 
 export const allColors = [
-  ...new Set(products.flatMap((p) => p.colors)),
+  ...new Set(products.map((p) => p.color)),
 ].sort();
 
 export function getProductBySlug(slug: string): Product | undefined {
@@ -447,7 +464,9 @@ export function getProductBySlug(slug: string): Product | undefined {
 }
 
 export function getFeaturedProducts(): Product[] {
-  return products.filter((p) => p.isNew || p.isPopular).slice(0, 6);
+  return [...products]
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 6);
 }
 
 export function getNewArrivals(): Product[] {
@@ -457,6 +476,6 @@ export function getNewArrivals(): Product[] {
 }
 
 export const priceRange = {
-  min: Math.min(...products.map((p) => p.price)),
-  max: Math.max(...products.map((p) => p.price)),
+  min: Math.min(...products.map((p) => p.discountedPrice)),
+  max: Math.max(...products.map((p) => p.discountedPrice)),
 };

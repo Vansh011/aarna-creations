@@ -16,25 +16,34 @@ export type Fabric =
   | "Rayon"
   | "Linen";
 
-export type Size = "XS" | "S" | "M" | "L" | "XL" | "XXL";
+export type Size =
+  | "XS"
+  | "S"
+  | "M"
+  | "L"
+  | "XL"
+  | "XXL"
+  | "3XL"
+  | "4XL"
+  | "5XL"
+  | "Free Size"
+  | "Oversized";
 
 export interface Product {
   id: string;
   slug: string;
   name: string;
-  price: number;
-  originalPrice?: number;
+  discountedPrice: number;
+  mainPrice: number;
   images: string[];
   category: Category;
+  subcategory?: string;
   sizes: Size[];
-  colors: string[];
-  fabric: Fabric;
-  occasion: Occasion;
+  color: string;
+  fabricMaterial: string;
   description: string;
-  inStock: boolean;
-  isNew?: boolean;
-  isPopular?: boolean;
   createdAt: string;
+  updatedAt: string;
 }
 
 export interface CartItem {
@@ -76,9 +85,21 @@ export type SortOption =
 export interface ProductFilters {
   categories: Category[];
   sizes: Size[];
-  colors: string[];
-  fabrics: Fabric[];
-  occasions: Occasion[];
+  materials: string[];
   priceMin: number;
   priceMax: number;
+}
+
+export interface ProductCatalog {
+  products: Product[];
+  updatedAt: string;
+}
+
+export interface SoldProductLogEntry {
+  id: string;
+  name: string;
+  discountedPrice: number;
+  mainPrice: number;
+  category: Category;
+  soldAt: string;
 }

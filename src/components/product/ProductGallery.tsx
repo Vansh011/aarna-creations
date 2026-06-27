@@ -11,30 +11,32 @@ interface ProductGalleryProps {
 
 export function ProductGallery({ images, name }: ProductGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const activeImage = images[activeIndex] ?? images[0];
 
   return (
     <div className="space-y-4">
-      <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-cream shadow-lg">
+      <div className="relative aspect-[3/4] overflow-hidden rounded-lg bg-cream shadow-[0_28px_80px_rgba(90,21,41,0.15)] ring-1 ring-gold/15">
         <Image
-          src={images[activeIndex]}
-          alt={`${name} - image ${activeIndex + 1}`}
+          src={activeImage}
+          alt={name + " image " + (activeIndex + 1)}
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 50vw"
           priority
         />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-maroon/20 via-transparent to-transparent" />
         {images.length > 1 && (
           <>
             <button
-              onClick={() => setActiveIndex((i) => (i - 1 + images.length) % images.length)}
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow flex items-center justify-center text-maroon hover:bg-gold transition-colors"
+              onClick={() => setActiveIndex((index) => (index - 1 + images.length) % images.length)}
+              className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/92 text-maroon shadow transition-colors hover:bg-gold"
               aria-label="Previous image"
             >
               <ChevronLeft className="h-5 w-5" />
             </button>
             <button
-              onClick={() => setActiveIndex((i) => (i + 1) % images.length)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow flex items-center justify-center text-maroon hover:bg-gold transition-colors"
+              onClick={() => setActiveIndex((index) => (index + 1) % images.length)}
+              className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/92 text-maroon shadow transition-colors hover:bg-gold"
               aria-label="Next image"
             >
               <ChevronRight className="h-5 w-5" />
@@ -44,16 +46,18 @@ export function ProductGallery({ images, name }: ProductGalleryProps) {
       </div>
 
       {images.length > 1 && (
-        <div className="flex gap-3">
+        <div className="grid grid-cols-5 gap-3">
           {images.map((img, index) => (
             <button
-              key={index}
+              key={img + index}
               onClick={() => setActiveIndex(index)}
-              className={`relative w-20 h-24 rounded-lg overflow-hidden border-2 transition-colors ${
-                index === activeIndex ? "border-gold" : "border-transparent"
-              }`}
+              className={[
+                "relative aspect-[3/4] overflow-hidden rounded-md border-2 bg-cream transition-all",
+                index === activeIndex ? "border-gold shadow-md" : "border-transparent opacity-75 hover:opacity-100",
+              ].join(" ")}
+              aria-label={"View image " + (index + 1)}
             >
-              <Image src={img} alt="" fill className="object-cover" sizes="80px" />
+              <Image src={img} alt="" fill className="object-cover" sizes="90px" />
             </button>
           ))}
         </div>

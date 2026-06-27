@@ -58,10 +58,22 @@ The customer sends this message to your business WhatsApp number. You can then s
 
 ## Deploy
 
-Deploy to [Vercel](https://vercel.com) for free:
+Deploy on Netlify:
 
 ```bash
 npm run build
 ```
 
-Set `NEXT_PUBLIC_WHATSAPP_NUMBER` in Vercel environment variables.
+Set `NEXT_PUBLIC_WHATSAPP_NUMBER` and `OWNER_PIN` in Netlify environment variables.
+
+
+## Owner Dashboard
+
+Visit `/owner` to manage live products without editing code.
+
+- Set `OWNER_PIN=xxxx` in Netlify environment variables. This is server-only; do not use `NEXT_PUBLIC_OWNER_PIN`.
+- Add products with 1-5 photos, name, prices, color text, sizes, fabric/material, category, optional subcategory, and description.
+- Photos are compressed in the browser to WebP/JPEG at about 75-80% quality before upload.
+- Sold items can be selected and removed from the live catalog; uploaded product photos are deleted from Netlify Blobs.
+
+Live product data is stored in Netlify Blobs using the `aarna-products` store and product images are stored in the `aarna-images` store.

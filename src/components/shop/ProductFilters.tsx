@@ -1,49 +1,34 @@
 "use client";
 
-import {
-  categories,
-  fabrics,
-  occasions,
-  sizes,
-  allColors,
-  priceRange,
-} from "@/data/products";
+import { categories, sizes } from "@/data/products";
+import { getMaterialOptions } from "@/lib/products";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { formatPrice } from "@/lib/utils";
-import type { ProductFilters } from "@/types";
+import type { Product, ProductFilters } from "@/types";
 
 interface ProductFiltersProps {
+  products: Product[];
+  priceRange: { min: number; max: number };
   filters: ProductFilters;
   onChange: (filters: ProductFilters) => void;
 }
 
-function FilterSection({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
+function FilterSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="border-b border-gold/20 pb-5 mb-5 last:border-0">
-      <h3 className="font-serif text-maroon text-sm uppercase tracking-wider mb-3">
-        {title}
-      </h3>
+    <div className="mb-5 border-b border-gold/20 pb-5 last:border-0">
+      <h3 className="mb-3 font-serif text-sm uppercase tracking-wider text-maroon">{title}</h3>
       {children}
     </div>
   );
 }
 
-export function ProductFiltersPanel({ filters, onChange }: ProductFiltersProps) {
-  const toggleArrayItem = <T extends string>(
-    key: keyof ProductFilters,
-    value: T
-  ) => {
+export function ProductFiltersPanel({ products, priceRange, filters, onChange }: ProductFiltersProps) {
+  const materialOptions = getMaterialOptions(products);
+
+  const toggleArrayItem = <T extends string>(key: keyof ProductFilters, value: T) => {
     const current = filters[key] as T[];
-    const updated = current.includes(value)
-      ? current.filter((v) => v !== value)
-      : [...current, value];
+    const updated = current.includes(value) ? current.filter((v) => v !== value) : [...current, value];
     onChange({ ...filters, [key]: updated });
   };
 
@@ -52,11 +37,8 @@ export function ProductFiltersPanel({ filters, onChange }: ProductFiltersProps) 
       <FilterSection title="Category">
         <div className="space-y-2">
           {categories.map((cat) => (
-            <label key={cat} className="flex items-center gap-2 cursor-pointer text-sm text-maroon/80">
-              <Checkbox
-                checked={filters.categories.includes(cat)}
-                onCheckedChange={() => toggleArrayItem("categories", cat)}
-              />
+            <label key={cat} className="flex cursor-pointer items-center gap-2 text-sm text-maroon/80">
+              <Checkbox checked={filters.categories.includes(cat)} onCheckedChange={() => toggleArrayItem("categories", cat)} />
               {cat}
             </label>
           ))}
@@ -65,31 +47,31 @@ export function ProductFiltersPanel({ filters, onChange }: ProductFiltersProps) 
 
       <FilterSection title="Size">
         <div className="flex flex-wrap gap-2">
-          {sizes.map((size) => (
-            <button
-              key={size}
-              onClick={() => toggleArrayItem("sizes", size)}
-              className={`px-3 py-1.5 text-xs border rounded-md transition-colors ${
-                filters.sizes.includes(size)
-                  ? "bg-maroon text-white border-maroon"
-                  : "border-maroon/30 text-maroon hover:border-maroon"
-              }`}
-            >
-              {size}
-            </button>
-          ))}
+          {sizes.map((size) => {
+            const active = filters.sizes.includes(size);
+            return (
+              <button
+                key={size}
+                onClick={() => toggleArrayItem("sizes", size)}
+                className={[
+                  "rounded-md border px-3 py-1.5 text-xs transition-colors",
+                  active ? "border-maroon bg-maroon text-white" : "border-maroon/30 text-maroon hover:border-maroon",
+                ].join(" ")}
+              >
+                {size}
+              </button>
+            );
+          })}
         </div>
       </FilterSection>
 
       <FilterSection title="Price Range">
         <Slider
           min={priceRange.min}
-          max={priceRange.max}
+          max={Math.max(priceRange.max, 1)}
           step={100}
           value={[filters.priceMin, filters.priceMax]}
-          onValueChange={([min, max]) =>
-            onChange({ ...filters, priceMin: min, priceMax: max })
-          }
+          onValueChange={([min, max]) => onChange({ ...filters, priceMin: min, priceMax: max })}
           className="mb-3"
         />
         <div className="flex justify-between text-xs text-maroon/70">
@@ -98,47 +80,18 @@ export function ProductFiltersPanel({ filters, onChange }: ProductFiltersProps) 
         </div>
       </FilterSection>
 
-      <FilterSection title="Color">
-        <div className="space-y-2 max-h-40 overflow-y-auto">
-          {allColors.map((color) => (
-            <label key={color} className="flex items-center gap-2 cursor-pointer text-sm text-maroon/80">
-              <Checkbox
-                checked={filters.colors.includes(color)}
-                onCheckedChange={() => toggleArrayItem("colors", color)}
-              />
-              {color}
-            </label>
-          ))}
-        </div>
-      </FilterSection>
-
-      <FilterSection title="Fabric">
-        <div className="space-y-2">
-          {fabrics.map((fabric) => (
-            <label key={fabric} className="flex items-center gap-2 cursor-pointer text-sm text-maroon/80">
-              <Checkbox
-                checked={filters.fabrics.includes(fabric)}
-                onCheckedChange={() => toggleArrayItem("fabrics", fabric)}
-              />
-              {fabric}
-            </label>
-          ))}
-        </div>
-      </FilterSection>
-
-      <FilterSection title="Occasion">
-        <div className="space-y-2">
-          {occasions.map((occ) => (
-            <label key={occ} className="flex items-center gap-2 cursor-pointer text-sm text-maroon/80">
-              <Checkbox
-                checked={filters.occasions.includes(occ)}
-                onCheckedChange={() => toggleArrayItem("occasions", occ)}
-              />
-              {occ}
-            </label>
-          ))}
-        </div>
-      </FilterSection>
+      {materialOptions.length > 0 && (
+        <FilterSection title="Fabric / Material">
+          <div className="space-y-2">
+            {materialOptions.map((material) => (
+              <label key={material} className="flex cursor-pointer items-center gap-2 text-sm text-maroon/80">
+                <Checkbox checked={filters.materials.includes(material)} onCheckedChange={() => toggleArrayItem("materials", material)} />
+                {material}
+              </label>
+            ))}
+          </div>
+        </FilterSection>
+      )}
     </div>
   );
 }

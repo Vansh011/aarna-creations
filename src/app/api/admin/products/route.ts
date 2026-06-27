@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
       if (file.size > 2_500_000) return jsonError("Each compressed photo must be under 2.5 MB");
 
       const key = makeProductImageKey(id, index, file.type || "image/webp");
-      const buffer = Buffer.from(await file.arrayBuffer());
+      const buffer = await file.arrayBuffer();
       await imageStore.set(key, buffer, { metadata: { contentType: file.type } });
       uploadedKeys.push(key);
       imageUrls.push(productImageUrl(key));

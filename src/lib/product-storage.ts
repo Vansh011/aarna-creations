@@ -1,3 +1,4 @@
+import { getStore, type Store } from "@netlify/blobs";
 import { products as fallbackProducts } from "@/data/products";
 import type { Product, ProductCatalog, SoldProductLogEntry } from "@/types";
 
@@ -6,21 +7,12 @@ export const IMAGE_STORE = "aarna-images";
 export const CATALOG_KEY = "index.json";
 export const SOLD_LOG_KEY = "sold-log.json";
 
-interface BlobStore {
-  get: (key: string, options?: Record<string, unknown>) => Promise<unknown>;
-  set: (key: string, value: unknown, options?: Record<string, unknown>) => Promise<unknown>;
-  setJSON?: (key: string, value: unknown, options?: Record<string, unknown>) => Promise<unknown>;
-  delete: (key: string) => Promise<unknown>;
-}
+type BlobStore = Store;
 
-const strongJsonOptions = { type: "json", consistency: "strong" };
+const strongJsonOptions = { type: "json" as const, consistency: "strong" as const };
 
-async function loadBlobStore(name: string): Promise<BlobStore | null> {
+function loadBlobStore(name: string): BlobStore | null {
   try {
-    const importer = new Function("specifier", "return import(specifier)") as (
-      specifier: string
-    ) => Promise<{ getStore: (name: string) => BlobStore }>;
-    const { getStore } = await importer("@netlify/blobs");
     return getStore(name);
   } catch {
     return null;
@@ -42,7 +34,7 @@ function normalizeCatalog(value: unknown): ProductCatalog | null {
 }
 
 export async function readStoredCatalog(): Promise<ProductCatalog | null> {
-  const store = await loadBlobStore(PRODUCT_STORE);
+  const store = loadBlobStore(PRODUCT_STORE);
   if (!store) return null;
 
   try {
@@ -66,9 +58,9 @@ export async function getLiveProductBySlug(slug: string): Promise<Product | unde
 }
 
 export async function writeStoredProducts(products: Product[]): Promise<ProductCatalog> {
-  const store = await loadBlobStore(PRODUCT_STORE);
+  const store = loadBlobStore(PRODUCT_STORE);
   if (!store) {
-    throw new Error("Netlify Blobs is not available in this runtime.");
+    throw new Error("Netlify Blobs is not configured. Deploy on Netlify or run with Netlify Dev for owner uploads.");
   }
 
   const catalog: ProductCatalog = {
@@ -77,16 +69,16 @@ export async function writeStoredProducts(products: Product[]): Promise<ProductC
   };
 
   if (store.setJSON) {
-    await store.setJSON(CATALOG_KEY, catalog, { consistency: "strong" });
+    await store.setJSON(CATALOG_KEY, catalog);
   } else {
-    await store.set(CATALOG_KEY, JSON.stringify(catalog), { consistency: "strong" });
+    await store.set(CATALOG_KEY, JSON.stringify(catalog));
   }
 
   return catalog;
 }
 
 export async function readSoldLog(): Promise<SoldProductLogEntry[]> {
-  const store = await loadBlobStore(PRODUCT_STORE);
+  const store = loadBlobStore(PRODUCT_STORE);
   if (!store) return [];
 
   try {
@@ -99,19 +91,19 @@ export async function readSoldLog(): Promise<SoldProductLogEntry[]> {
 
 export async function appendSoldLog(entries: SoldProductLogEntry[]): Promise<void> {
   if (entries.length === 0) return;
-  const store = await loadBlobStore(PRODUCT_STORE);
+  const store = loadBlobStore(PRODUCT_STORE);
   if (!store) return;
 
   const current = await readSoldLog();
   const next = [...entries, ...current].slice(0, 500);
   if (store.setJSON) {
-    await store.setJSON(SOLD_LOG_KEY, next, { consistency: "strong" });
+    await store.setJSON(SOLD_LOG_KEY, next);
   } else {
-    await store.set(SOLD_LOG_KEY, JSON.stringify(next), { consistency: "strong" });
+    await store.set(SOLD_LOG_KEY, JSON.stringify(next));
   }
 }
 
-export async function getImageStore(): Promise<BlobStore | null> {
+export function getImageStore(): BlobStore | null {
   return loadBlobStore(IMAGE_STORE);
 }
 
@@ -155,7 +147,7 @@ export function isSafeProductImageKey(key: string): boolean {
 }
 
 export async function deleteProductImages(product: Product): Promise<void> {
-  const store = await getImageStore();
+  const store = getImageStore();
   if (!store) return;
 
   const keys = product.images

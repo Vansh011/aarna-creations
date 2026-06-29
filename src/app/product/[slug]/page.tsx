@@ -36,30 +36,34 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <div className="bg-ivory">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
-        <nav className="mb-8 flex items-center gap-1 text-sm text-maroon/60">
-          <Link href="/" className="hover:text-maroon">Home</Link>
-          <ChevronRight className="h-3 w-3" />
-          <Link href="/shop" className="hover:text-maroon">Shop</Link>
-          <ChevronRight className="h-3 w-3" />
-          <span className="line-clamp-1 text-maroon">{product.name}</span>
-        </nav>
+      <section className="border-b border-gold/20 bg-[#f1dfca] px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <nav className="flex items-center gap-1 text-sm text-maroon/60">
+            <Link href="/" className="hover:text-maroon">Home</Link>
+            <ChevronRight className="h-3 w-3" />
+            <Link href="/shop" className="hover:text-maroon">Shop</Link>
+            <ChevronRight className="h-3 w-3" />
+            <span className="line-clamp-1 text-maroon">{product.name}</span>
+          </nav>
+        </div>
+      </section>
 
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
         <div className="mb-20 grid gap-10 md:grid-cols-2 lg:gap-16">
           <ProductGallery images={product.images} name={product.name} />
           <ProductOptions product={product} />
         </div>
 
         {related.length > 0 && (
-          <section>
-            <div className="mb-7 flex items-end justify-between gap-4">
+          <section className="border-t border-gold/20 pt-14">
+            <div className="mb-8 flex items-end justify-between gap-4">
               <div>
-                <p className="text-sm uppercase tracking-[0.25em] text-gold">Curated pairings</p>
-                <h2 className="mt-2 font-serif text-2xl text-maroon">You May Also Like</h2>
+                <p className="ornate-title text-[#6d1022]">Curated pairings</p>
+                <h2 className="mt-5 font-serif text-[2.2rem] text-[#7a1026]">You May Also Like</h2>
               </div>
-              <Link href="/shop" className="text-sm font-medium text-maroon hover:text-gold">View all</Link>
+              <Link href="/shop" className="text-sm font-bold uppercase tracking-[0.2em] text-maroon hover:text-gold">View all</Link>
             </div>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-7">
               {related.map((item) => (
                 <ProductCard key={item.id} product={item} />
               ))}

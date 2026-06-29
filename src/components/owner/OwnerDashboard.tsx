@@ -362,7 +362,7 @@ export function OwnerDashboard() {
                 {images.map((image) => (
                   <div key={image.id} className="relative overflow-hidden rounded-lg border border-gold/20 bg-cream">
                     <div className="relative aspect-[3/4]">
-                      <img src={image.previewUrl} alt={image.originalName} className="h-full w-full object-cover" />
+                      <Image src={image.previewUrl} alt={image.originalName} fill unoptimized className="object-cover" sizes="160px" />
                     </div>
                     <button type="button" onClick={() => removeImage(image.id)} className="absolute right-2 top-2 rounded-full bg-white p-1 text-maroon shadow" aria-label="Remove image">
                       <X className="h-4 w-4" />

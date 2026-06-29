@@ -5,40 +5,90 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 
 const collections = [
-  { name: "Kurtis", href: "/shop?category=Kurtis", image: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=900&q=85" },
-  { name: "Suit Sets", href: "/shop?category=Suit+Sets", image: "https://images.unsplash.com/photo-1595777457583-95c059a36a12?w=900&q=85" },
-  { name: "Festive Wear", href: "/shop?category=Festive+Wear", image: "https://images.unsplash.com/photo-1610030459668-9a67d699e746?w=900&q=85" },
-  { name: "Lehengas", href: "/shop?category=Lehengas", image: "https://images.unsplash.com/photo-1610030459413-c7360a5080a1?w=900&q=85" },
+  {
+    number: "01",
+    name: "Kurtis",
+    subtitle: "Everyday elegance, beautifully crafted.",
+    href: "/shop?category=Kurtis",
+    image: "/aarna-collection-kurtis-v3.png",
+    featured: true,
+  },
+  {
+    number: "02",
+    name: "Lehengas",
+    subtitle: "Heirloom energy for moments that matter.",
+    href: "/shop?category=Lehengas",
+    image: "/aarna-collection-lehengas-v3.png",
+    featured: true,
+  },
+  {
+    number: "03",
+    name: "Festive Sets",
+    subtitle: "Curated co-ords for every celebration.",
+    href: "/shop?category=Festive+Wear",
+    image: "/aarna-collection-festive-v3.png",
+  },
+  {
+    number: "04",
+    name: "Everyday Ethnic",
+    subtitle: "Quiet luxury for daily dressing.",
+    href: "/shop?category=Suit+Sets",
+    image: "/aarna-collection-everyday-v3.png",
+  },
+  {
+    number: "05",
+    name: "Girls Ethnic Wear",
+    subtitle: "Little wonders, traditionally dressed.",
+    href: "/shop?category=Girls+Wear",
+    image: "/aarna-collection-girls-v3.png",
+  },
 ];
 
 export function FeaturedCollections() {
   return (
-    <section className="bg-ivory px-4 py-20 sm:px-6 lg:px-8">
+    <section id="collections" className="bg-[#fbf7ef] px-4 py-10 sm:px-6 lg:px-8 lg:py-12">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-12 grid gap-5 md:grid-cols-[0.8fr_1.2fr] md:items-end">
-          <div>
-            <p className="text-sm uppercase tracking-[0.28em] text-gold">Shop by mood</p>
-            <h2 className="mt-3 font-serif text-4xl text-maroon md:text-5xl">Explore Collections</h2>
-          </div>
-          <p className="max-w-2xl text-maroon/68 md:justify-self-end">
-            A softer, visual way to browse daily wear, festive favorites, wedding moments, and handpicked boutique pieces.
-          </p>
+        <div className="mb-8 text-center">
+          <p className="ornate-title text-[#8a1538]">The collections</p>
+          <h2 className="section-subline mt-3">
+            Curated for every celebration
+          </h2>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6">
-          {collections.map((collection, index) => (
-            <Link key={collection.name} href={collection.href} className="group relative aspect-[3/4] overflow-hidden rounded-lg shadow-[0_20px_60px_rgba(90,21,41,0.12)]">
-              <Image src={collection.image} alt={collection.name} fill className="object-cover transition-transform duration-700 group-hover:scale-110" sizes="(max-width: 768px) 50vw, 25vw" />
-              <div className="absolute inset-0 bg-gradient-to-t from-maroon/90 via-maroon/25 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
-                <p className="mb-1 text-xs uppercase tracking-[0.22em] text-gold">0{index + 1}</p>
-                <h3 className="font-serif text-xl text-white md:text-2xl">{collection.name}</h3>
-                <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-gold opacity-0 transition-opacity group-hover:opacity-100">
-                  Shop Now <ArrowRight className="h-3.5 w-3.5" />
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5 lg:gap-6">
+          {collections.map((collection) => (
+            <Link
+              key={collection.name}
+              href={collection.href}
+              className="group overflow-hidden border border-[#c9ad76] bg-[#fffaf5] text-center shadow-[0_8px_24px_rgba(78,30,22,0.06)] transition-transform duration-300 hover:-translate-y-1"
+            >
+              <div className="mx-4 mt-4 overflow-hidden rounded-t-[5rem] border border-[#d9bf8f]/70 bg-cream">
+                <div className="relative aspect-[4/5]">
+                  <Image
+                    src={collection.image}
+                    alt={collection.name}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    sizes="(max-width: 1024px) 50vw, 20vw"
+                  />
+                </div>
+              </div>
+              <div className="px-4 pb-5 pt-4">
+                <p className="font-calligraphy text-2xl text-gold">{collection.number}</p>
+                <h3 className="mt-1 font-serif text-[1.55rem] leading-none text-[#76162a]">{collection.name}</h3>
+                <p className="mx-auto mt-2 min-h-[2.4rem] max-w-[12rem] font-serif text-sm leading-[1.15] text-ink/75">{collection.subtitle}</p>
+                <span className="mt-4 inline-flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#7c1022]">
+                  Discover <ArrowRight className="h-3 w-3" />
                 </span>
               </div>
             </Link>
           ))}
+        </div>
+
+        <div className="mt-8 text-center">
+          <Link href="/shop" className="maroon-cta">
+            View all <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
         </div>
       </div>
     </section>

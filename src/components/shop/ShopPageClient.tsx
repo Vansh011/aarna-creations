@@ -52,24 +52,36 @@ function ShopContent({ products }: ShopPageClientProps) {
 
   return (
     <div className="bg-ivory">
-      <section className="relative overflow-hidden bg-maroon py-14 text-ivory">
-        <div className="absolute inset-0 boutique-pattern opacity-20" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(201,162,39,0.28),transparent_32rem)]" />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-sm uppercase tracking-[0.28em] text-gold">Limited pieces, handpicked daily</p>
-          <h1 className="mt-3 font-serif text-4xl text-ivory md:text-5xl">Shop Collection</h1>
-          <p className="mt-4 max-w-2xl text-ivory/78">
-            Browse fresh ethnic wear drops, detailed sizing, and one-of-one colorways curated by AARNA CREATIONS.
+      <section className="relative overflow-hidden px-4 py-14 text-ivory sm:px-6 lg:px-8 lg:py-16">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('/aarna-collection-festive-v3.png')" }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050403]/95 via-[#32100c]/82 to-[#211812]/34" />
+        <div className="absolute inset-0 boutique-pattern opacity-20 mix-blend-soft-light" />
+        <div className="relative mx-auto max-w-7xl">
+          <p className="ornate-title text-gold-light">Shop the edit</p>
+          <h1 className="mt-5 max-w-3xl font-serif text-[2.65rem] leading-[0.98] text-white md:text-[3.6rem]">
+            Find the one piece nobody else will wear like you.
+          </h1>
+          <p className="mt-4 max-w-2xl font-serif text-xl leading-7 text-ivory/86">
+            Browse fresh ethnic wear drops, detailed sizing, and single-color boutique pieces curated by AARNA CREATIONS.
           </p>
         </div>
       </section>
 
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+        <div className="mb-8 grid gap-4 border-y border-gold/25 py-5 text-sm text-maroon/72 md:grid-cols-3">
+          <p><span className="font-semibold text-[#8a1538]">Unique design:</span> no mass matching sets.</p>
+          <p><span className="font-semibold text-[#8a1538]">Material-first:</span> fabric and fall matter.</p>
+          <p><span className="font-semibold text-[#8a1538]">Fast moving:</span> limited items can sell within hours.</p>
+        </div>
+
         <div className="flex gap-8">
-          <aside className="hidden w-64 shrink-0 lg:block">
-            <div className="sticky top-24 rounded-lg border border-gold/20 bg-white/92 p-6 shadow-[0_20px_60px_rgba(90,21,41,0.08)]">
-              <h2 className="font-serif text-lg text-maroon">Filters</h2>
-              <p className="mb-5 mt-1 text-xs text-maroon/55">Refine by fit, fabric, and occasion-ready category.</p>
+          <aside className="hidden w-72 shrink-0 lg:block">
+            <div className="sticky top-36 border border-gold/25 bg-white/95 p-6 shadow-[0_24px_70px_rgba(78,19,37,0.09)]">
+              <h2 className="font-serif text-2xl text-[#8a1538]">Filters</h2>
+              <p className="mb-6 mt-2 text-sm leading-6 text-ink/58">Refine by fit, fabric, and occasion-ready category.</p>
               <ProductFiltersPanel products={products} priceRange={range} filters={filters} onChange={setFilters} />
             </div>
           </aside>
@@ -79,7 +91,7 @@ function ShopContent({ products }: ShopPageClientProps) {
               <Button
                 variant="outline"
                 size="sm"
-                className="lg:hidden"
+                className="rounded-none lg:hidden"
                 onClick={() => setMobileFiltersOpen(true)}
               >
                 <SlidersHorizontal className="h-4 w-4" />
@@ -97,14 +109,14 @@ function ShopContent({ products }: ShopPageClientProps) {
             <SortBar sort={sort} onChange={setSort} count={filtered.length} />
 
             {filtered.length === 0 ? (
-              <div className="rounded-lg border border-gold/20 bg-white py-16 text-center shadow-sm">
-                <p className="mb-4 text-maroon/70">No products match your filters</p>
-                <Button variant="outline" onClick={() => setFilters(defaultFilters)}>
+              <div className="border border-gold/25 bg-white py-16 text-center shadow-sm">
+                <p className="mb-4 text-maroon/70">No products match your filters.</p>
+                <Button variant="outline" className="rounded-none" onClick={() => setFilters(defaultFilters)}>
                   Clear Filters
                 </Button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {filtered.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
@@ -122,7 +134,7 @@ function ShopContent({ products }: ShopPageClientProps) {
             <div className="absolute bottom-0 right-0 top-0 w-80 max-w-full overflow-y-auto bg-ivory shadow-2xl">
               <div className="flex items-center justify-between border-b border-gold/20 p-4">
                 <div>
-                  <h2 className="font-serif text-lg text-maroon">Filters</h2>
+                  <h2 className="font-serif text-2xl text-[#8a1538]">Filters</h2>
                   <p className="text-xs text-maroon/55">Find the perfect piece.</p>
                 </div>
                 <button onClick={() => setMobileFiltersOpen(false)} aria-label="Close filters">
@@ -135,7 +147,7 @@ function ShopContent({ products }: ShopPageClientProps) {
               <div className="sticky bottom-0 border-t border-gold/20 bg-ivory p-4">
                 <Button
                   variant="gold"
-                  className="w-full"
+                  className="w-full rounded-none uppercase tracking-[0.16em]"
                   onClick={() => setMobileFiltersOpen(false)}
                 >
                   Show {filtered.length} Products

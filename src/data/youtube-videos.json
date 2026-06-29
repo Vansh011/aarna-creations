@@ -1,37 +1,23 @@
 [
   {
-    "id": "dQw4w9WgXcQ",
-    "title": "New Arrival — Festive Kurti Collection | Aarna Creations",
+    "id": "aarna-channel-home",
+    "title": "AARNA CREATIONS by Abha Maheshwari - latest boutique drops",
     "url": "https://www.youtube.com/@aarnacreations1921",
-    "thumbnail": "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
-    "publishedAt": "2025-01-15T10:00:00Z"
+    "thumbnail": "/aarna-home-hero-v3.png",
+    "publishedAt": "2026-01-01T00:00:00Z"
   },
   {
-    "id": "jNQXAC9IVRw",
-    "title": "Designer Suit Sets — Latest Collection",
-    "url": "https://www.youtube.com/@aarnacreations1921",
-    "thumbnail": "https://img.youtube.com/vi/jNQXAC9IVRw/hqdefault.jpg",
-    "publishedAt": "2025-01-10T10:00:00Z"
+    "id": "aarna-channel-materials",
+    "title": "See fabric, fall, and work details before you choose",
+    "url": "https://www.youtube.com/@aarnacreations1921/videos",
+    "thumbnail": "/aarna-material-usp-v3.png",
+    "publishedAt": "2026-01-01T00:00:00Z"
   },
   {
-    "id": "9bZkp7q19f0",
-    "title": "Wedding Lehenga Unboxing | Aarna Creations",
-    "url": "https://www.youtube.com/@aarnacreations1921",
-    "thumbnail": "https://img.youtube.com/vi/9bZkp7q19f0/hqdefault.jpg",
-    "publishedAt": "2025-01-05T10:00:00Z"
-  },
-  {
-    "id": "kJQP7kiw5Fk",
-    "title": "Girls Ethnic Wear — New Styles",
-    "url": "https://www.youtube.com/@aarnacreations1921",
-    "thumbnail": "https://img.youtube.com/vi/kJQP7kiw5Fk/hqdefault.jpg",
-    "publishedAt": "2024-12-28T10:00:00Z"
-  },
-  {
-    "id": "RgKAFK5djSk",
-    "title": "Festive Saree Collection Showcase",
-    "url": "https://www.youtube.com/@aarnacreations1921",
-    "thumbnail": "https://img.youtube.com/vi/RgKAFK5djSk/hqdefault.jpg",
-    "publishedAt": "2024-12-20T10:00:00Z"
+    "id": "aarna-channel-visit",
+    "title": "Follow AARNA CREATIONS for new arrivals and styling ideas",
+    "url": "https://www.youtube.com/@aarnacreations1921/shorts",
+    "thumbnail": "/aarna-collection-festive-v3.png",
+    "publishedAt": "2026-01-01T00:00:00Z"
   }
 ]

@@ -1,48 +1,57 @@
 import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+const featureStrip = [
+  ["No repeat designs", "Each piece feels like yours"],
+  ["Material-first", "Fabric, fall, and finish checked"],
+  ["Curated by Abha", "Made with care"],
+  ["WhatsApp ordering", "Personal support before buying"],
+];
 
 export function Hero() {
   return (
-    <section className="relative min-h-[88vh] overflow-hidden bg-maroon text-ivory">
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1610030459668-9a67d699e746?w=1920&q=85')",
-        }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-r from-maroon via-maroon/82 to-maroon/25" />
-      <div className="absolute inset-0 boutique-pattern opacity-25" />
-      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-ivory to-transparent" />
+    <section className="bg-ivory">
+      <div className="relative h-[520px] overflow-hidden bg-maroon text-ivory lg:h-[560px]">
+        <div
+          className="absolute inset-0 bg-cover bg-[center_32%] lg:bg-[center_40%]"
+          style={{ backgroundImage: "url('/aarna-home-hero-v3.png')" }}
+        />
+        <div className="absolute inset-0 luxury-scrim" />
 
-      <div className="relative mx-auto flex min-h-[78vh] max-w-7xl items-center px-4 py-24 sm:px-6 lg:px-8">
-        <div className="max-w-3xl fade-up">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-ivory/10 px-4 py-2 text-sm text-gold backdrop-blur">
-            <Sparkles className="h-4 w-4" />
-            New limited drops added by the owner
-          </div>
-          <p className="mb-4 text-sm font-medium uppercase tracking-[0.32em] text-gold">by Abha Maheshwari</p>
-          <h1 className="font-serif text-5xl leading-[1.02] text-ivory sm:text-6xl lg:text-7xl">
-            Ethnic wear that feels made for the moment.
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ivory/84 md:text-xl">
-            Handpicked kurtis, suit sets, lehengas, sarees, and festive pieces for women and girls, curated with boutique attention.
-          </p>
-          <div className="mt-9 flex flex-wrap gap-4">
-            <Button variant="gold" size="lg" asChild>
-              <Link href="/shop">Shop Collection <ArrowRight className="h-5 w-5" /></Link>
-            </Button>
-            <Button variant="outline" size="lg" className="border-ivory text-ivory hover:bg-ivory hover:text-maroon" asChild>
-              <Link href="/about">Our Story</Link>
-            </Button>
+        <div className="relative mx-auto flex h-full max-w-7xl items-center px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl fade-up">
+            <p className="editorial-kicker mb-5 text-gold-light">Est. boutique</p>
+            <h1 className="font-brand text-[3.8rem] uppercase leading-[0.86] text-white sm:text-[5rem] lg:text-[5.6rem]">
+              AARNA <br /> CREATIONS
+            </h1>
+
+            <p className="brand-byline mt-5 text-gold-light">by Abha Maheshwari</p>
+            <p className="mt-9 max-w-xl font-serif text-[1rem] leading-[1.15] text-white md:text-[1.2rem]">
+              Wear what you feel like, and let it be unique - curated kurtis, lehengas and festive sets, hand-picked for moments that matter.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Button variant="default" size="lg" className="h-11 rounded-[2px] bg-[#8a2c3c] px-7 text-xs font-extrabold uppercase tracking-[0.12em] shadow-none hover:bg-[#6d1022]" asChild>
+                <Link href="/shop?sort=newest">Shop New Arrivals <ArrowRight className="h-4 w-4" /></Link>
+              </Button>
+              <Button variant="outline" size="lg" className="h-11 rounded-[2px] border border-gold bg-black/10 px-7 text-xs font-extrabold uppercase tracking-[0.12em] text-[#f6d887] hover:bg-gold hover:text-maroon" asChild>
+                <Link href="#collections">Explore Collections</Link>
+              </Button>
+            </div>
+            <Link href="#visit" className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-gold transition-colors hover:text-gold-light">
+              <MapPin className="h-4 w-4" /> Visit us here
+            </Link>
           </div>
         </div>
       </div>
 
-      <div className="relative border-y border-gold/30 bg-maroon/92 py-3 text-gold">
-        <div className="marquee-track flex whitespace-nowrap text-sm uppercase tracking-[0.26em]">
-          {Array.from({ length: 8 }).map((_, index) => (
-            <span key={index} className="mx-6">Limited pieces / WhatsApp orders / Custom notes / Fresh arrivals</span>
+      <div className="border-b border-gold/25 bg-[#fbf7ef]">
+        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-px px-4 sm:px-6 lg:grid-cols-4 lg:px-8">
+          {featureStrip.map(([title, label]) => (
+            <div key={title} className="px-3 py-5 text-center">
+              <p className="font-serif text-xl leading-none text-[#6d1022] md:text-2xl">{title}</p>
+              <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.2em] text-ink/70">{label}</p>
+            </div>
           ))}
         </div>
       </div>

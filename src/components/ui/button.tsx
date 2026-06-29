@@ -4,20 +4,20 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[2px] text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
   {
     variants: {
       variant: {
-        default: "bg-maroon text-white hover:bg-maroon-dark shadow-md",
-        gold: "bg-gold text-maroon-dark hover:bg-gold-light shadow-md font-semibold",
+        default: "bg-maroon text-white hover:bg-maroon-dark shadow-sm",
+        gold: "bg-gold text-maroon-dark hover:bg-gold-light shadow-sm font-semibold",
         outline: "border-2 border-maroon text-maroon hover:bg-maroon hover:text-white",
         ghost: "hover:bg-cream text-maroon",
-        whatsapp: "bg-emerald text-white hover:bg-emerald/90 shadow-md",
+        whatsapp: "bg-emerald text-white hover:bg-emerald/90 shadow-sm",
       },
       size: {
         default: "h-11 px-6 py-2",
         sm: "h-9 px-4 text-xs",
-        lg: "h-13 px-8 text-base",
+        lg: "h-11 px-7 text-sm",
         icon: "h-10 w-10",
       },
     },

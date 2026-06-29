@@ -1,22 +1,132 @@
-import { getStore, type Store } from "@netlify/blobs";
+import crypto from "node:crypto";
 import { products as fallbackProducts } from "@/data/products";
 import type { Product, ProductCatalog, SoldProductLogEntry } from "@/types";
 
-export const PRODUCT_STORE = "aarna-products";
-export const IMAGE_STORE = "aarna-images";
-export const CATALOG_KEY = "index.json";
-export const SOLD_LOG_KEY = "sold-log.json";
+export const CLOUDINARY_DEFAULT_FOLDER = "aarna-creations";
+export const CATALOG_PUBLIC_ID = "catalog/products.json";
+export const SOLD_LOG_PUBLIC_ID = "catalog/sold-log.json";
 
-type BlobStore = Store;
+const JSON_CONTENT_TYPE = "application/json";
 
-const strongJsonOptions = { type: "json" as const, consistency: "strong" as const };
+interface CloudinaryConfig {
+  cloudName: string;
+  apiKey: string;
+  apiSecret: string;
+  folder: string;
+}
 
-function loadBlobStore(name: string): BlobStore | null {
-  try {
-    return getStore(name);
-  } catch {
-    return null;
+interface CloudinaryUploadResponse {
+  public_id: string;
+  secure_url: string;
+  version: number;
+  resource_type: string;
+}
+
+interface UploadedProductImage {
+  publicId: string;
+  secureUrl: string;
+}
+
+function cloudinaryConfig(): CloudinaryConfig | null {
+  const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+  const apiKey = process.env.CLOUDINARY_API_KEY;
+  const apiSecret = process.env.CLOUDINARY_API_SECRET;
+  const folder = process.env.CLOUDINARY_FOLDER || CLOUDINARY_DEFAULT_FOLDER;
+
+  if (!cloudName || !apiKey || !apiSecret) return null;
+  return { cloudName, apiKey, apiSecret, folder };
+}
+
+export function isCloudinaryConfigured(): boolean {
+  return Boolean(cloudinaryConfig());
+}
+
+function requireCloudinaryConfig(): CloudinaryConfig {
+  const config = cloudinaryConfig();
+  if (!config) {
+    throw new Error("Cloudinary is not configured. Add CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET in Render.");
   }
+  return config;
+}
+
+function cloudinaryTimestamp(): string {
+  return Math.floor(Date.now() / 1000).toString();
+}
+
+function signCloudinaryParams(params: Record<string, string>, apiSecret: string): string {
+  const serialized = Object.entries(params)
+    .filter(([, value]) => value !== "")
+    .sort(([left], [right]) => left.localeCompare(right))
+    .map(([key, value]) => key + "=" + value)
+    .join("&");
+
+  return crypto.createHash("sha1").update(serialized + apiSecret).digest("hex");
+}
+
+function scopedPublicId(config: CloudinaryConfig, publicId: string): string {
+  return [config.folder, publicId]
+    .filter(Boolean)
+    .join("/")
+    .replace(/\/+/g, "/");
+}
+
+function cloudinaryDeliveryUrl(config: CloudinaryConfig, resourceType: "raw" | "image", publicId: string): string {
+  return "https://res.cloudinary.com/" + config.cloudName + "/" + resourceType + "/upload/" + scopedPublicId(config, publicId);
+}
+
+async function uploadToCloudinary(
+  resourceType: "raw" | "image",
+  file: Blob,
+  filename: string,
+  publicId: string,
+): Promise<CloudinaryUploadResponse> {
+  const config = requireCloudinaryConfig();
+  const timestamp = cloudinaryTimestamp();
+  const params: Record<string, string> = {
+    invalidate: "true",
+    overwrite: "true",
+    public_id: scopedPublicId(config, publicId),
+    timestamp,
+  };
+  const signature = signCloudinaryParams(params, config.apiSecret);
+  const formData = new FormData();
+
+  formData.append("file", file, filename);
+  formData.append("api_key", config.apiKey);
+  formData.append("signature", signature);
+  Object.entries(params).forEach(([key, value]) => formData.append(key, value));
+  const response = await fetch("https://api.cloudinary.com/v1_1/" + config.cloudName + "/" + resourceType + "/upload", {
+    method: "POST",
+    body: formData,
+  });
+
+  const body = await response.json().catch(() => null) as Partial<CloudinaryUploadResponse> & { error?: { message?: string } } | null;
+  if (!response.ok || !body?.secure_url || !body.public_id) {
+    throw new Error(body?.error?.message || "Cloudinary upload failed");
+  }
+
+  return body as CloudinaryUploadResponse;
+}
+
+async function destroyCloudinaryResource(resourceType: "raw" | "image", publicId: string): Promise<void> {
+  const config = requireCloudinaryConfig();
+  const timestamp = cloudinaryTimestamp();
+  const params: Record<string, string> = {
+    invalidate: "true",
+    public_id: publicId,
+    timestamp,
+  };
+  const signature = signCloudinaryParams(params, config.apiSecret);
+  const formData = new FormData();
+
+  formData.append("api_key", config.apiKey);
+  formData.append("signature", signature);
+  Object.entries(params).forEach(([key, value]) => formData.append(key, value));
+
+  await fetch("https://api.cloudinary.com/v1_1/" + config.cloudName + "/" + resourceType + "/destroy", {
+    method: "POST",
+    body: formData,
+  }).catch(() => undefined);
 }
 
 function normalizeCatalog(value: unknown): ProductCatalog | null {
@@ -33,16 +143,32 @@ function normalizeCatalog(value: unknown): ProductCatalog | null {
   };
 }
 
-export async function readStoredCatalog(): Promise<ProductCatalog | null> {
-  const store = loadBlobStore(PRODUCT_STORE);
-  if (!store) return null;
+async function readRawJson<T>(publicId: string): Promise<T | null> {
+  const config = cloudinaryConfig();
+  if (!config) return null;
 
   try {
-    const value = await store.get(CATALOG_KEY, strongJsonOptions);
-    return normalizeCatalog(value);
+    const response = await fetch(cloudinaryDeliveryUrl(config, "raw", publicId) + "?t=" + Date.now(), {
+      cache: "no-store",
+      headers: { Accept: JSON_CONTENT_TYPE },
+    });
+    if (!response.ok) return null;
+    return await response.json() as T;
   } catch {
     return null;
   }
+}
+
+async function writeRawJson(publicId: string, value: unknown): Promise<void> {
+  const json = JSON.stringify(value, null, 2);
+  const file = new Blob([json], { type: JSON_CONTENT_TYPE });
+  const filename = publicId.split("/").pop() || "catalog.json";
+  await uploadToCloudinary("raw", file, filename, publicId);
+}
+
+export async function readStoredCatalog(): Promise<ProductCatalog | null> {
+  const value = await readRawJson<unknown>(CATALOG_PUBLIC_ID);
+  return normalizeCatalog(value);
 }
 
 export async function getLiveProducts(options: { fallback?: boolean } = {}): Promise<Product[]> {
@@ -58,53 +184,25 @@ export async function getLiveProductBySlug(slug: string): Promise<Product | unde
 }
 
 export async function writeStoredProducts(products: Product[]): Promise<ProductCatalog> {
-  const store = loadBlobStore(PRODUCT_STORE);
-  if (!store) {
-    throw new Error("Netlify Blobs is not configured. Deploy on Netlify or run with Netlify Dev for owner uploads.");
-  }
-
   const catalog: ProductCatalog = {
     products,
     updatedAt: new Date().toISOString(),
   };
 
-  if (store.setJSON) {
-    await store.setJSON(CATALOG_KEY, catalog);
-  } else {
-    await store.set(CATALOG_KEY, JSON.stringify(catalog));
-  }
-
+  await writeRawJson(CATALOG_PUBLIC_ID, catalog);
   return catalog;
 }
 
 export async function readSoldLog(): Promise<SoldProductLogEntry[]> {
-  const store = loadBlobStore(PRODUCT_STORE);
-  if (!store) return [];
-
-  try {
-    const value = await store.get(SOLD_LOG_KEY, strongJsonOptions);
-    return Array.isArray(value) ? (value as SoldProductLogEntry[]) : [];
-  } catch {
-    return [];
-  }
+  const value = await readRawJson<unknown>(SOLD_LOG_PUBLIC_ID);
+  return Array.isArray(value) ? value as SoldProductLogEntry[] : [];
 }
 
 export async function appendSoldLog(entries: SoldProductLogEntry[]): Promise<void> {
   if (entries.length === 0) return;
-  const store = loadBlobStore(PRODUCT_STORE);
-  if (!store) return;
-
   const current = await readSoldLog();
   const next = [...entries, ...current].slice(0, 500);
-  if (store.setJSON) {
-    await store.setJSON(SOLD_LOG_KEY, next);
-  } else {
-    await store.set(SOLD_LOG_KEY, JSON.stringify(next));
-  }
-}
-
-export function getImageStore(): BlobStore | null {
-  return loadBlobStore(IMAGE_STORE);
+  await writeRawJson(SOLD_LOG_PUBLIC_ID, next);
 }
 
 export function slugify(value: string): string {
@@ -126,33 +224,34 @@ export function uniqueSlug(name: string, products: Product[]): string {
   return base + "-" + index;
 }
 
-export function makeProductImageKey(productId: string, index: number, mimeType: string): string {
-  const extension = mimeType.includes("jpeg") || mimeType.includes("jpg") ? "jpg" : "webp";
-  return "products/" + productId + "/" + (index + 1) + "." + extension;
+export async function uploadProductImage(productId: string, index: number, file: File): Promise<UploadedProductImage> {
+  const extension = file.type.includes("jpeg") || file.type.includes("jpg") ? "jpg" : "webp";
+  const publicId = "products/" + productId + "/" + (index + 1);
+  const blob = new Blob([await file.arrayBuffer()], { type: file.type || "image/webp" });
+  const uploaded = await uploadToCloudinary("image", blob, (index + 1) + "." + extension, publicId);
+
+  return {
+    publicId: uploaded.public_id,
+    secureUrl: uploaded.secure_url,
+  };
 }
 
-export function productImageUrl(key: string): string {
-  return "/api/product-image/" + key;
+function publicIdFromCloudinaryUrl(url: string): string | null {
+  const match = url.match(/\/image\/upload\/(?:v\d+\/)?(.+)$/);
+  if (!match?.[1]) return null;
+  return decodeURIComponent(match[1].replace(/\.[a-z0-9]+(?:\?.*)?$/i, ""));
 }
 
-export function productImageKeyFromUrl(url: string): string | null {
-  const marker = "/api/product-image/";
-  const index = url.indexOf(marker);
-  if (index === -1) return null;
-  return decodeURIComponent(url.slice(index + marker.length));
-}
-
-export function isSafeProductImageKey(key: string): boolean {
-  return /^products\/[a-z0-9-]+\/[1-5]\.(webp|jpg|jpeg)$/i.test(key);
+export async function deleteProductImagePublicIds(publicIds: string[]): Promise<void> {
+  const configured = cloudinaryConfig();
+  if (!configured) return;
+  await Promise.all(publicIds.map((publicId) => destroyCloudinaryResource("image", publicId)));
 }
 
 export async function deleteProductImages(product: Product): Promise<void> {
-  const store = getImageStore();
-  if (!store) return;
+  const publicIds = product.imagePublicIds?.length
+    ? product.imagePublicIds
+    : product.images.map(publicIdFromCloudinaryUrl).filter((value): value is string => Boolean(value));
 
-  const keys = product.images
-    .map(productImageKeyFromUrl)
-    .filter((key): key is string => Boolean(key && isSafeProductImageKey(key)));
-
-  await Promise.all(keys.map((key) => store.delete(key).catch(() => undefined)));
+  await deleteProductImagePublicIds(publicIds);
 }

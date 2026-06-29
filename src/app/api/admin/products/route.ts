@@ -3,12 +3,12 @@ import { categories, sizes } from "@/data/products";
 import type { Category, Product, Size, SoldProductLogEntry } from "@/types";
 import {
   appendSoldLog,
+  deleteProductImagePublicIds,
   deleteProductImages,
-  getImageStore,
   getLiveProducts,
-  makeProductImageKey,
-  productImageUrl,
+  isCloudinaryConfigured,
   uniqueSlug,
+  uploadProductImage,
   writeStoredProducts,
 } from "@/lib/product-storage";
 
@@ -82,25 +82,26 @@ export async function POST(request: NextRequest) {
   if (selectedSizes.length === 0) return jsonError("At least one size is required");
   if (!description) return jsonError("Description is required");
 
-  const imageStore = await getImageStore();
-  if (!imageStore) return jsonError("Netlify Blobs is not available in this runtime", 503);
+  if (!isCloudinaryConfigured()) {
+    return jsonError("Cloudinary is not configured in this runtime", 503);
+  }
 
   const existingProducts = await getLiveProducts({ fallback: false });
   const id = crypto.randomUUID();
   const slug = uniqueSlug(name, existingProducts);
-  const uploadedKeys: string[] = [];
+  const uploadedPublicIds: string[] = [];
 
   try {
     const imageUrls: string[] = [];
+    const imagePublicIds: string[] = [];
     for (const [index, file] of imageFiles.entries()) {
       if (!file.type.startsWith("image/")) return jsonError("Only image files can be uploaded");
       if (file.size > 2_500_000) return jsonError("Each compressed photo must be under 2.5 MB");
 
-      const key = makeProductImageKey(id, index, file.type || "image/webp");
-      const buffer = await file.arrayBuffer();
-      await imageStore.set(key, buffer, { metadata: { contentType: file.type } });
-      uploadedKeys.push(key);
-      imageUrls.push(productImageUrl(key));
+      const uploaded = await uploadProductImage(id, index, file);
+      uploadedPublicIds.push(uploaded.publicId);
+      imagePublicIds.push(uploaded.publicId);
+      imageUrls.push(uploaded.secureUrl);
     }
 
     const now = new Date().toISOString();
@@ -111,6 +112,7 @@ export async function POST(request: NextRequest) {
       discountedPrice,
       mainPrice,
       images: imageUrls,
+      imagePublicIds,
       category,
       subcategory: subcategory || undefined,
       sizes: selectedSizes,
@@ -124,7 +126,7 @@ export async function POST(request: NextRequest) {
     await writeStoredProducts([product, ...existingProducts]);
     return NextResponse.json({ product }, { status: 201 });
   } catch (error) {
-    await Promise.all(uploadedKeys.map((key) => imageStore.delete(key).catch(() => undefined)));
+    await deleteProductImagePublicIds(uploadedPublicIds).catch(() => undefined);
     return jsonError(error instanceof Error ? error.message : "Unable to upload product", 500);
   }
 }

@@ -36,6 +36,7 @@ export interface Product {
   discountedPrice: number;
   mainPrice: number;
   images: string[];
+  imagePublicIds?: string[];
   category: Category;
   subcategory?: string;
   sizes: Size[];

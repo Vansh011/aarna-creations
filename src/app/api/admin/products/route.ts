@@ -40,19 +40,28 @@ function jsonError(message: string, status = 400) {
   return NextResponse.json({ error: message }, { status });
 }
 
+function jsonUnexpectedError(error: unknown) {
+  return jsonError(error instanceof Error ? error.message : "Unexpected server error", 500);
+}
+
 function isFile(value: FormDataEntryValue): value is File {
   return typeof value === "object" && "arrayBuffer" in value && "type" in value;
 }
 
 export async function GET(request: NextRequest) {
-  const pin = request.headers.get("x-owner-pin") ?? request.nextUrl.searchParams.get("pin");
-  if (!isAuthorized(pin)) return jsonError("Invalid owner PIN", 401);
+  try {
+    const pin = request.headers.get("x-owner-pin") ?? request.nextUrl.searchParams.get("pin");
+    if (!isAuthorized(pin)) return jsonError("Invalid owner PIN", 401);
 
-  const products = await getLiveProducts({ fallback: false });
-  return NextResponse.json({ products });
+    const products = await getLiveProducts({ fallback: false });
+    return NextResponse.json({ products });
+  } catch (error) {
+    return jsonUnexpectedError(error);
+  }
 }
 
 export async function POST(request: NextRequest) {
+  try {
   const formData = await request.formData();
   if (!isAuthorized(formData.get("pin"))) return jsonError("Invalid owner PIN", 401);
 
@@ -129,9 +138,13 @@ export async function POST(request: NextRequest) {
     await deleteProductImagePublicIds(uploadedPublicIds).catch(() => undefined);
     return jsonError(error instanceof Error ? error.message : "Unable to upload product", 500);
   }
+  } catch (error) {
+    return jsonUnexpectedError(error);
+  }
 }
 
 export async function DELETE(request: NextRequest) {
+  try {
   const body = await request.json().catch(() => null) as { pin?: string; ids?: string[] } | null;
   if (!body || !isAuthorized(body.pin ?? null)) return jsonError("Invalid owner PIN", 401);
   if (!Array.isArray(body.ids) || body.ids.length === 0) return jsonError("Select at least one item");
@@ -157,4 +170,7 @@ export async function DELETE(request: NextRequest) {
   await appendSoldLog(soldEntries);
 
   return NextResponse.json({ removed: removedProducts.length, products: remainingProducts });
+  } catch (error) {
+    return jsonUnexpectedError(error);
+  }
 }

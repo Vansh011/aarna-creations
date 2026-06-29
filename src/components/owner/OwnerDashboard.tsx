@@ -58,6 +58,19 @@ function canvasToBlob(canvas: HTMLCanvasElement, type: string, quality: number):
   return new Promise((resolve) => canvas.toBlob(resolve, type, quality));
 }
 
+async function readApiJson<T extends { error?: string }>(response: Response): Promise<T> {
+  const text = await response.text();
+  if (!text.trim()) {
+    return {} as T;
+  }
+
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    throw new Error("Server returned an unexpected response. Check the Render logs for the real error.");
+  }
+}
+
 async function compressImage(file: File): Promise<File> {
   const image = await imageFromFile(file);
   const maxEdge = 1600;
@@ -119,8 +132,8 @@ export function OwnerDashboard() {
       headers: { "x-owner-pin": nextPin },
       cache: "no-store",
     });
-    if (!response.ok) throw new Error((await response.json()).error ?? "Could not load products");
-    const data = await response.json();
+    const data = await readApiJson<{ products?: Product[]; error?: string }>(response);
+    if (!response.ok) throw new Error(data.error ?? "Could not load products");
     setProducts(data.products ?? []);
   };
 
@@ -202,9 +215,11 @@ export function OwnerDashboard() {
       images.forEach((image) => formData.append("images", image.file));
 
       const response = await fetch("/api/admin/products", { method: "POST", body: formData });
-      const data = await response.json();
+      const data = await readApiJson<{ product?: Product; error?: string }>(response);
       if (!response.ok) throw new Error(data.error ?? "Upload failed");
-      setProducts((current) => [data.product, ...current]);
+      const uploadedProduct = data.product;
+      if (!uploadedProduct) throw new Error("Upload failed: product was not returned by the server");
+      setProducts((current) => [uploadedProduct, ...current]);
       resetAddForm();
       setMessage("New item uploaded to the website.");
     } catch (uploadError) {
@@ -230,12 +245,12 @@ export function OwnerDashboard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pin: removePin, ids: selectedProductIds }),
       });
-      const data = await response.json();
+      const data = await readApiJson<{ removed?: number; products?: Product[]; error?: string }>(response);
       if (!response.ok) throw new Error(data.error ?? "Remove failed");
       setProducts(data.products ?? []);
       setSelectedProductIds([]);
       setRemovePin("");
-      setMessage("Removed " + data.removed + " item(s) from the website.");
+      setMessage("Removed " + (data.removed ?? selectedProductIds.length) + " item(s) from the website.");
     } catch (removeError) {
       setError(removeError instanceof Error ? removeError.message : "Remove failed");
     } finally {

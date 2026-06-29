@@ -196,6 +196,10 @@ p {
   transform: translateY(-1px);
 }
 
+.mobile-menu-panel {
+  animation: mobile-menu-panel 220ms ease-out both;
+}
+
 .marquee-track {
   animation: marquee-slide 36s linear infinite;
 }
@@ -253,5 +257,81 @@ p {
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+
+@keyframes mobile-menu-panel {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  .brand-byline {
+    font-size: 1.35rem;
+    gap: 0.45rem;
+  }
+
+  .brand-byline::before,
+  .brand-byline::after {
+    font-size: 0.62rem;
+  }
+
+  .editorial-kicker {
+    gap: 0.5rem;
+    font-size: 0.64rem;
+    letter-spacing: 0.14em;
+  }
+
+  .editorial-kicker::before,
+  .editorial-kicker::after {
+    width: 22px;
+  }
+
+  .ornate-title {
+    gap: 0.55rem;
+    font-size: 1.55rem;
+    line-height: 1;
+    letter-spacing: 0.045em;
+  }
+
+  .ornate-title::before,
+  .ornate-title::after {
+    width: 24px;
+    height: 10px;
+    background:
+      linear-gradient(currentColor, currentColor) center / 100% 1px no-repeat,
+      radial-gradient(circle, currentColor 0 1.7px, transparent 2.2px) center / 10px 10px no-repeat;
+  }
+
+  .section-subline {
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+
+  .maroon-cta {
+    min-height: 2.35rem;
+    padding: 0.72rem 1.1rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .fade-up,
+  .float-in,
+  .mobile-menu-panel {
+    animation: none;
   }
 }

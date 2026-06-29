@@ -31,7 +31,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#dfc59a] bg-[#fbf7ef]/98 text-maroon shadow-[0_6px_28px_rgba(62,13,22,0.08)] backdrop-blur-md">
-      <div className="overflow-hidden bg-gradient-to-r from-[#5b0a15] via-[#75182a] to-[#4d0812] py-2 text-[11px] font-bold text-[#fee9c4]">
+      <div className="overflow-hidden bg-gradient-to-r from-[#5b0a15] via-[#75182a] to-[#4d0812] py-1.5 text-[10px] sm:py-2 sm:text-[11px] font-bold text-[#fee9c4]">
         <div className="marquee-track flex w-max whitespace-nowrap px-4">
           {[...tickerItems, ...tickerItems, ...tickerItems].map((item, index) => (
             <span key={item + index} className="mx-7 inline-flex items-center gap-7">
@@ -42,10 +42,10 @@ export function Header() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex min-h-[84px] items-center justify-between gap-5">
-          <Link href="/" className="group shrink-0" aria-label="AARNA CREATIONS home">
-            <span className="block font-brand text-[2rem] uppercase leading-none tracking-[0.035em] text-[#6d1022] sm:text-[2.35rem]">
+      <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">
+        <div className="flex min-h-[64px] items-center justify-between gap-2 sm:min-h-[84px] sm:gap-5">
+          <Link href="/" className="group min-w-0 lg:shrink-0" aria-label="AARNA CREATIONS home">
+            <span className="block max-w-[12.2rem] font-brand text-[1.28rem] uppercase leading-[0.92] tracking-[0.035em] text-[#6d1022] min-[380px]:max-w-[13.5rem] min-[380px]:text-[1.42rem] sm:max-w-none sm:text-[2.35rem]">
               AARNA CREATIONS
             </span>
           </Link>
@@ -69,13 +69,13 @@ export function Header() {
             })}
           </nav>
 
-          <div className="flex items-center gap-4 text-[#171414]">
+          <div className="flex items-center gap-1.5 text-[#171414] sm:gap-4">
             <Link href="/shop" className="hidden p-2 transition-colors hover:text-maroon sm:inline-flex" aria-label="Search products">
               <Search className="h-5 w-5" />
             </Link>
             <Link
               href="/cart"
-              className="relative inline-flex p-2 transition-colors hover:text-maroon"
+              className="relative inline-flex h-10 w-10 items-center justify-center p-2 transition-colors hover:text-maroon"
               aria-label="Shopping cart"
             >
               <ShoppingBag className="h-5 w-5" />
@@ -87,7 +87,7 @@ export function Header() {
             </Link>
 
             <button
-              className="inline-flex h-10 w-10 items-center justify-center border border-gold/45 text-maroon lg:hidden"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-[2px] border border-gold/45 bg-white/45 text-maroon transition-colors hover:bg-cream lg:hidden"
               onClick={() => setMobileOpen((open) => !open)}
               aria-label="Toggle menu"
             >
@@ -97,13 +97,13 @@ export function Header() {
         </div>
 
         {mobileOpen && (
-          <nav className="border-t border-gold/20 py-4 lg:hidden">
+          <nav className="mobile-menu-panel border-t border-gold/25 bg-[#fffaf3] px-1 py-3 shadow-[0_14px_30px_rgba(62,13,22,0.08)] lg:hidden">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="block py-3 text-sm font-semibold uppercase tracking-[0.2em] text-maroon/76"
+                className="block border-b border-gold/15 px-3 py-3 text-[13px] font-extrabold uppercase tracking-[0.18em] text-maroon/82 last:border-0"
               >
                 {link.label}
               </Link>

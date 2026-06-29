@@ -5,19 +5,19 @@ export function Footer() {
   return (
     <footer className="relative overflow-hidden bg-gradient-to-r from-[#641121] via-[#811b2c] to-[#5b0b17] text-[#fff4e2]">
       <div className="absolute inset-0 pattern-border opacity-25" />
-      <div className="relative mx-auto max-w-[1500px] px-6 py-10 sm:px-8 lg:px-12">
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-[1.45fr_0.75fr_1fr]">
+      <div className="relative mx-auto max-w-[1500px] px-4 py-9 sm:px-8 sm:py-10 lg:px-12">
+        <div className="grid grid-cols-1 gap-8 text-center sm:text-left md:grid-cols-[1.45fr_0.75fr_1fr] md:gap-10">
           <div>
             <div>
-              <p className="font-brand text-[2.35rem] uppercase leading-[0.92] tracking-[0.05em] text-[#f3d89a]">
+              <p className="font-brand text-[2rem] uppercase leading-[0.92] tracking-[0.05em] text-[#f3d89a] sm:text-[2.35rem]">
                 AARNA <br /> CREATIONS
               </p>
               <p className="brand-byline mt-3 text-gold-light">by Abha Maheshwari</p>
             </div>
-            <p className="mt-5 max-w-md text-sm leading-6 text-[#f2dbc2]">
+            <p className="mx-auto mt-5 max-w-md text-sm leading-6 text-[#f2dbc2] sm:mx-0">
               Limited ethnic wear, selected for material, fall, color, and individuality. Wear what you feel like, and let it be unique.
             </p>
-            <p className="mt-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#f3d89a]">
+            <p className="mt-4 inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[#f3d89a] sm:justify-start">
               <MapPin className="h-4 w-4" /> Visit us here
             </p>
           </div>
@@ -35,7 +35,7 @@ export function Footer() {
 
           <div>
             <h3 className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#fff0d6]">Connect</h3>
-            <div className="mt-4 flex gap-3">
+            <div className="mt-4 flex justify-center gap-3 sm:justify-start">
               <a
                 href="https://www.youtube.com/@aarnacreations1921"
                 target="_blank"
@@ -68,7 +68,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="my-7 h-px bg-[#f6d8bc]/20" />
+        <div className="my-6 h-px bg-[#f6d8bc]/20 sm:my-7" />
       </div>
     </footer>
   );

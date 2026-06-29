@@ -12,7 +12,7 @@ export function CartItemList() {
 
   if (items.length === 0) {
     return (
-      <div className="border border-gold/25 bg-white/92 px-6 py-16 text-center shadow-[0_20px_60px_rgba(78,19,37,0.08)]">
+      <div className="border border-gold/25 bg-white/92 px-4 py-12 text-center shadow-[0_20px_60px_rgba(78,19,37,0.08)] sm:px-6 sm:py-16">
         <ShoppingBag className="mx-auto mb-5 h-12 w-12 text-gold" />
         <p className="mb-2 font-serif text-2xl text-[#7a1026]">Your boutique bag is empty</p>
         <p className="mx-auto mb-7 max-w-md text-sm leading-6 text-ink/60">
@@ -26,34 +26,34 @@ export function CartItemList() {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-3">
+    <div className="grid gap-6 lg:grid-cols-3 lg:gap-8">
       <div className="space-y-4 lg:col-span-2">
         {items.map((item) => (
           <div
             key={item.cartId}
-            className="flex gap-4 border border-gold/20 bg-white p-4 shadow-[0_18px_45px_rgba(78,19,37,0.08)]"
+            className="flex flex-col gap-4 border border-gold/20 bg-white p-3 shadow-[0_14px_34px_rgba(78,19,37,0.07)] sm:flex-row sm:p-4 sm:shadow-[0_18px_45px_rgba(78,19,37,0.08)]"
           >
             <Link
               href={"/product/" + item.slug}
-              className="relative h-32 w-24 shrink-0 overflow-hidden bg-cream"
+              className="relative h-52 w-full shrink-0 overflow-hidden bg-cream sm:h-32 sm:w-24"
             >
               <Image
                 src={item.image}
                 alt={item.name}
                 fill
                 className="object-cover"
-                sizes="96px"
+                sizes="(max-width: 640px) 100vw, 96px"
               />
             </Link>
 
             <div className="min-w-0 flex-1">
               <Link
                 href={"/product/" + item.slug}
-                className="line-clamp-1 font-serif text-xl text-[#7a1026] transition-colors hover:text-gold"
+                className="line-clamp-2 font-serif text-lg leading-snug text-[#7a1026] transition-colors hover:text-gold sm:line-clamp-1 sm:text-xl"
               >
                 {item.name}
               </Link>
-              <p className="mt-2 text-sm text-ink/58">
+              <p className="mt-2 text-xs leading-5 text-ink/58 sm:text-sm">
                 Size: {item.size} | Color: {item.color}
               </p>
               {item.customization && (
@@ -66,10 +66,10 @@ export function CartItemList() {
               </p>
             </div>
 
-            <div className="flex flex-col items-end justify-between">
+            <div className="flex flex-row items-center justify-between gap-3 border-t border-gold/15 pt-3 sm:flex-col sm:items-end sm:border-t-0 sm:pt-0">
               <button
                 onClick={() => removeItem(item.cartId)}
-                className="p-1 text-maroon/42 transition-colors hover:text-red-500"
+                className="order-3 p-2 text-maroon/42 transition-colors hover:text-red-500 sm:order-none sm:p-1"
                 aria-label="Remove item"
               >
                 <Trash2 className="h-4 w-4" />
@@ -104,7 +104,7 @@ export function CartItemList() {
       </div>
 
       <div className="lg:col-span-1">
-        <div className="sticky top-36 border border-gold/25 bg-white p-6 shadow-[0_24px_70px_rgba(78,19,37,0.1)]">
+        <div className="border border-gold/25 bg-white p-4 shadow-[0_18px_45px_rgba(78,19,37,0.08)] sm:p-6 lg:sticky lg:top-36 lg:shadow-[0_24px_70px_rgba(78,19,37,0.1)]">
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-gold">Order summary</p>
           <h2 className="mt-2 font-serif text-2xl text-[#7a1026]">Your selected pieces</h2>
           <div className="my-6 space-y-3 text-sm">
@@ -122,7 +122,7 @@ export function CartItemList() {
             <span>Total</span>
             <span>{formatPrice(getTotal())}</span>
           </div>
-          <Button variant="gold" size="lg" className="w-full rounded-none uppercase tracking-[0.16em]" asChild>
+          <Button variant="gold" size="lg" className="w-full rounded-[2px] uppercase tracking-[0.14em] sm:rounded-none sm:tracking-[0.16em]" asChild>
             <Link href="/checkout">Proceed to Checkout</Link>
           </Button>
           <p className="mt-4 text-center text-xs leading-5 text-ink/50">

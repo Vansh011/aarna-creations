@@ -3,6 +3,18 @@ import fallbackVideos from "@/data/youtube-videos.json";
 
 const CHANNEL_HANDLE = "aarnacreations1921";
 const CHANNEL_URL = "https://www.youtube.com/@aarnacreations1921";
+const FETCH_TIMEOUT_MS = 2500;
+
+async function fetchWithTimeout(url: string, init: RequestInit = {}): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
 
 function decodeXml(value: string): string {
   return value
@@ -18,7 +30,7 @@ function matchFirst(value: string, pattern: string): string | undefined {
 }
 
 function parseRssXml(xml: string): YouTubeVideo[] {
-  const entries = xml.match(new RegExp("<entry>[\s\S]*?<\/entry>", "g")) ?? [];
+  const entries = xml.match(/<entry>[\s\S]*?<\/entry>/g) ?? [];
 
   return entries
     .slice(0, 12)
@@ -46,7 +58,7 @@ async function resolveChannelId(): Promise<string | null> {
   if (envId) return envId;
 
   try {
-    const response = await fetch(CHANNEL_URL, {
+    const response = await fetchWithTimeout(CHANNEL_URL, {
       headers: { "User-Agent": "Mozilla/5.0" },
       next: { revalidate: 86400 },
     });
@@ -65,7 +77,7 @@ async function resolveChannelId(): Promise<string | null> {
 }
 
 async function fetchRssByUrl(url: string): Promise<YouTubeVideo[]> {
-  const response = await fetch(url, { next: { revalidate: 3600 } });
+  const response = await fetchWithTimeout(url, { next: { revalidate: 3600 } });
   if (!response.ok) return [];
   const xml = await response.text();
   return parseRssXml(xml);

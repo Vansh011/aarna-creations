@@ -44,23 +44,23 @@ export function YouTubeCarousel({ videos }: YouTubeCarouselProps) {
 
   return (
     <section
-      className="relative overflow-hidden bg-[#fbf7ef] px-4 py-12 text-ink sm:px-6 lg:px-8 lg:py-14"
+      className="relative overflow-hidden bg-[#fbf7ef] px-3 py-10 text-ink sm:px-6 lg:px-8 lg:py-14"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
       <div className="relative mx-auto max-w-6xl">
-        <div className="mb-8 text-center">
+        <div className="mb-7 text-center sm:mb-8">
           <p className="ornate-title text-[#6d1022]">YouTube drops</p>
           <h2 className="section-subline mt-3">
             See the fabric move before you choose.
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl font-serif text-base leading-6 text-[#836f65]">
+          <p className="mx-auto mt-3 max-w-2xl font-serif text-[0.95rem] leading-6 text-[#836f65] sm:text-base">
             Follow AARNA CREATIONS by Abha Maheshwari for new arrival videos, material close-ups, and real boutique updates.
           </p>
         </div>
 
-        <div className="relative px-8 md:px-12">
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="relative px-0 md:px-12">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
             <AnimatePresence mode="popLayout">
               {visibleVideos.map((video, index) => (
                 <motion.a
@@ -72,7 +72,7 @@ export function YouTubeCarousel({ videos }: YouTubeCarouselProps) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.35, delay: index * 0.06 }}
-                  className="group block overflow-hidden rounded-md bg-white shadow-[0_10px_24px_rgba(64,23,18,0.07)] ring-1 ring-[#e1d0b7]"
+                  className={(index > 0 ? "hidden md:block " : "") + "group overflow-hidden rounded-[3px] bg-white shadow-[0_10px_24px_rgba(64,23,18,0.07)] ring-1 ring-[#e1d0b7] transition-transform duration-300 active:scale-[0.99] md:rounded-md"}
                 >
                   <div className="relative aspect-video overflow-hidden">
                     <Image
@@ -102,17 +102,17 @@ export function YouTubeCarousel({ videos }: YouTubeCarouselProps) {
 
           {safeVideos.length > 1 && (
             <>
-              <button onClick={prev} className="absolute left-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#c3a26a] bg-[#fbf7ef] text-[#8d6d38] shadow-sm transition-colors hover:bg-gold hover:text-maroon" aria-label="Previous video">
+              <button onClick={prev} className="absolute left-0 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#c3a26a] bg-[#fbf7ef] text-[#8d6d38] shadow-sm transition-colors hover:bg-gold hover:text-maroon md:flex" aria-label="Previous video">
                 <ChevronLeft className="h-5 w-5" />
               </button>
-              <button onClick={next} className="absolute right-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#c3a26a] bg-[#fbf7ef] text-[#8d6d38] shadow-sm transition-colors hover:bg-gold hover:text-maroon" aria-label="Next video">
+              <button onClick={next} className="absolute right-0 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#c3a26a] bg-[#fbf7ef] text-[#8d6d38] shadow-sm transition-colors hover:bg-gold hover:text-maroon md:flex" aria-label="Next video">
                 <ChevronRight className="h-5 w-5" />
               </button>
             </>
           )}
         </div>
 
-        <div className="mt-8 text-center">
+        <div className="mt-7 text-center sm:mt-8">
           <a href={CHANNEL_URL} target="_blank" rel="noopener noreferrer" className="maroon-cta">
             Open YouTube Channel <ExternalLink className="h-3.5 w-3.5" />
           </a>

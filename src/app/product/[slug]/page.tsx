@@ -36,9 +36,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <div className="bg-ivory">
-      <section className="border-b border-gold/20 bg-[#f1dfca] px-4 py-8 sm:px-6 lg:px-8">
+      <section className="border-b border-gold/20 bg-[#f1dfca] px-4 py-4 sm:px-6 sm:py-8 lg:px-8">
         <div className="mx-auto max-w-7xl">
-          <nav className="flex items-center gap-1 text-sm text-maroon/60">
+          <nav className="flex items-center gap-1 text-xs text-maroon/60 sm:text-sm">
             <Link href="/" className="hover:text-maroon">Home</Link>
             <ChevronRight className="h-3 w-3" />
             <Link href="/shop" className="hover:text-maroon">Shop</Link>
@@ -48,22 +48,22 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
       </section>
 
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-        <div className="mb-20 grid gap-10 md:grid-cols-2 lg:gap-16">
+      <div className="mx-auto max-w-7xl px-3 py-7 sm:px-6 sm:py-10 lg:px-8 lg:py-14">
+        <div className="mb-12 grid gap-7 md:mb-20 md:grid-cols-2 md:gap-10 lg:gap-16">
           <ProductGallery images={product.images} name={product.name} />
           <ProductOptions product={product} />
         </div>
 
         {related.length > 0 && (
-          <section className="border-t border-gold/20 pt-14">
-            <div className="mb-8 flex items-end justify-between gap-4">
+          <section className="border-t border-gold/20 pt-10 sm:pt-14">
+            <div className="mb-6 flex flex-col items-start gap-4 sm:mb-8 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p className="ornate-title text-[#6d1022]">Curated pairings</p>
-                <h2 className="mt-5 font-serif text-[2.2rem] text-[#7a1026]">You May Also Like</h2>
+                <h2 className="mt-3 font-serif text-[1.65rem] text-[#7a1026] sm:mt-5 sm:text-[2.2rem]">You May Also Like</h2>
               </div>
               <Link href="/shop" className="text-sm font-bold uppercase tracking-[0.2em] text-maroon hover:text-gold">View all</Link>
             </div>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-7">
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-7">
               {related.map((item) => (
                 <ProductCard key={item.id} product={item} />
               ))}

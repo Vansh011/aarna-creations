@@ -63,7 +63,7 @@ export function CheckoutForm() {
 
   if (items.length === 0) {
     return (
-      <div className="text-center py-16">
+      <div className="py-12 text-center sm:py-16">
         <p className="text-maroon/70 text-lg mb-6">No items to checkout</p>
         <Button variant="gold" asChild>
           <Link href="/shop">Continue Shopping</Link>
@@ -73,9 +73,9 @@ export function CheckoutForm() {
   }
 
   return (
-    <div className="grid lg:grid-cols-2 gap-10">
+    <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
       <div>
-        <h2 className="font-serif text-2xl text-maroon mb-6">
+        <h2 className="mb-5 font-serif text-2xl text-maroon sm:mb-6">
           Delivery Details
         </h2>
         <div className="space-y-4">
@@ -122,7 +122,7 @@ export function CheckoutForm() {
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <Label htmlFor="city">City *</Label>
               <Input
@@ -165,11 +165,11 @@ export function CheckoutForm() {
       </div>
 
       <div>
-        <h2 className="font-serif text-2xl text-maroon mb-6">Order Review</h2>
-        <div className="bg-white rounded-lg p-6 shadow-sm border border-gold/10 space-y-4">
+        <h2 className="mb-5 font-serif text-2xl text-maroon sm:mb-6">Order Review</h2>
+        <div className="space-y-4 rounded-[3px] border border-gold/10 bg-white p-4 shadow-sm sm:rounded-lg sm:p-6">
           {items.map((item) => (
-            <div key={item.cartId} className="flex gap-3 pb-4 border-b border-gold/10 last:border-0 last:pb-0">
-              <div className="relative w-16 h-20 shrink-0 rounded overflow-hidden bg-cream">
+            <div key={item.cartId} className="flex gap-3 border-b border-gold/10 pb-4 last:border-0 last:pb-0">
+              <div className="relative h-20 w-16 shrink-0 overflow-hidden rounded bg-cream">
                 <Image
                   src={item.image}
                   alt={item.name}
@@ -191,7 +191,7 @@ export function CheckoutForm() {
                   </p>
                 )}
               </div>
-              <p className="text-sm font-semibold text-maroon shrink-0">
+              <p className="shrink-0 text-right text-xs font-semibold text-maroon sm:text-sm">
                 {formatPrice(item.price * item.quantity)}
               </p>
             </div>
@@ -204,7 +204,7 @@ export function CheckoutForm() {
             <span>{formatPrice(total)}</span>
           </div>
 
-          <div className="bg-cream rounded-lg p-4 text-sm text-maroon/70">
+          <div className="rounded-[3px] bg-cream p-3 text-[13px] leading-6 text-maroon/70 sm:rounded-lg sm:p-4 sm:text-sm">
             <p className="flex items-start gap-2">
               <MessageCircle className="h-4 w-4 shrink-0 mt-0.5 text-emerald" />
               Clicking &quot;Place Order&quot; will open WhatsApp with your order
@@ -216,7 +216,7 @@ export function CheckoutForm() {
           <Button
             variant="whatsapp"
             size="lg"
-            className="w-full text-base"
+            className="h-12 w-full rounded-[2px] text-sm font-extrabold uppercase tracking-[0.08em] sm:text-base"
             onClick={handlePlaceOrder}
           >
             <MessageCircle className="h-5 w-5" />

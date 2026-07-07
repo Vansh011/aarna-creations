@@ -46,7 +46,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body className={`${playfair.variable} ${cormorant.variable} ${greatVibes.variable} ${inter.variable} antialiased`}>
         <Header />
         <main className="min-h-screen">{children}</main>

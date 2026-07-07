@@ -1,15 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState, Suspense } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { SlidersHorizontal, X } from "lucide-react";
+import { categories } from "@/data/products";
 import { filterProducts, getPriceRange } from "@/lib/products";
 import { ProductCard } from "@/components/shop/ProductCard";
-import { ProductFiltersPanel } from "@/components/shop/ProductFilters";
-import { SortBar } from "@/components/shop/SortBar";
-import { FilterChips } from "@/components/shop/FilterChips";
-import { Button } from "@/components/ui/button";
-import type { Product, ProductFilters, SortOption, Category } from "@/types";
+import type { Category, Product, ProductFilters, SortOption } from "@/types";
 
 interface ShopPageClientProps {
   products: Product[];
@@ -18,96 +14,115 @@ interface ShopPageClientProps {
 function ShopContent({ products }: ShopPageClientProps) {
   const searchParams = useSearchParams();
   const range = useMemo(() => getPriceRange(products), [products]);
-  const defaultFilters = useMemo<ProductFilters>(() => ({
-    categories: [],
-    sizes: [],
-    materials: [],
-    priceMin: range.min,
-    priceMax: range.max,
-  }), [range.min, range.max]);
-  const [filters, setFilters] = useState<ProductFilters>(defaultFilters);
+  const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortOption>("newest");
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-
-  useEffect(() => {
-    setFilters(defaultFilters);
-  }, [defaultFilters]);
+  const [activeCategory, setActiveCategory] = useState<Category | "All">("All");
 
   useEffect(() => {
     const category = searchParams.get("category");
     const sortParam = searchParams.get("sort") as SortOption | null;
 
-    if (category) {
-      setFilters((prev) => ({
-        ...prev,
-        categories: [decodeURIComponent(category) as Category],
-      }));
+    if (category && categories.includes(category as Category)) {
+      setActiveCategory(category as Category);
     }
-    if (sortParam) {
-      setSort(sortParam);
-    }
+    if (sortParam) setSort(sortParam);
   }, [searchParams]);
 
-  const filtered = filterProducts(products, filters, sort);
+  const filters = useMemo<ProductFilters>(() => ({
+    categories: activeCategory === "All" ? [] : [activeCategory],
+    sizes: [],
+    materials: [],
+    priceMin: range.min,
+    priceMax: range.max,
+  }), [activeCategory, range.max, range.min]);
+
+  const filtered = useMemo(() => {
+    const categoryFiltered = filterProducts(products, filters, sort);
+    const term = query.trim().toLowerCase();
+    if (!term) return categoryFiltered;
+
+    return categoryFiltered.filter((product) => [
+      product.name,
+      product.category,
+      product.subcategory,
+      product.color,
+      product.fabricMaterial,
+      product.description,
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase()
+      .includes(term));
+  }, [filters, products, query, sort]);
 
   return (
-    <div className="bg-ivory">
-      <section className="relative overflow-hidden px-4 py-11 text-ivory sm:px-6 sm:py-14 lg:px-8 lg:py-16">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/aarna-collection-festive-v3.png')" }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050403]/95 via-[#32100c]/82 to-[#211812]/34" />
-        <div className="absolute inset-0 boutique-pattern opacity-20 mix-blend-soft-light" />
-        <div className="relative mx-auto max-w-7xl">
-          <p className="ornate-title text-gold-light">Scroll. Feel. Buy</p>
-          <p className="mt-3 max-w-2xl font-serif text-base leading-6 text-ivory/86 sm:mt-4 sm:text-xl sm:leading-7">
-            Live Sale ! Hurry up and grab your favorite pieces before they are gone.
+    <main>
+      <section className="page-hero">
+        <div className="section">
+          <span className="eyebrow">Full collection</span>
+          <h1 className="page-title">Boutique pieces that feel selected for you.</h1>
+          <p>
+            Use simple filters, then open any piece to see fabric, sizes, color, and WhatsApp-ready ordering. This page is designed for fast mobile browsing from Instagram traffic.
           </p>
         </div>
       </section>
-        
 
-        <div className="flex gap-8">
-          <aside className="hidden w-72 shrink-0 lg:block">
-            <div className="sticky top-36 border border-gold/25 bg-white/95 p-6 shadow-[0_24px_70px_rgba(78,19,37,0.09)]">
-              <h2 className="font-serif text-2xl text-[#8a1538]">Filters</h2>
-              <p className="mb-6 mt-2 text-sm leading-6 text-ink/58">Refine by fit, fabric, and occasion-ready category.</p>
-              <ProductFiltersPanel products={products} priceRange={range} filters={filters} onChange={setFilters} />
+      <section className="section">
+        <div className="shop-layout">
+          <aside className="filters">
+            <input
+              className="search-box"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search kurtis, sarees, festive..."
+              aria-label="Search products"
+            />
+            <select
+              className="select-box"
+              value={sort}
+              onChange={(event) => setSort(event.target.value as SortOption)}
+              aria-label="Sort products"
+            >
+              <option value="newest">Sort: New arrivals</option>
+              <option value="price-asc">Price: Low to high</option>
+              <option value="price-desc">Price: High to low</option>
+              <option value="popular">Best discount</option>
+            </select>
+            <div className="filter-row" aria-label="Category filters">
+              <button
+                className={activeCategory === "All" ? "filter-chip active" : "filter-chip"}
+                onClick={() => setActiveCategory("All")}
+              >
+                All
+              </button>
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  className={activeCategory === category ? "filter-chip active" : "filter-chip"}
+                  onClick={() => setActiveCategory(category)}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+            <div className="shop-note">
+              Tip: Ask Abha on WhatsApp if you are between sizes. Boutique pieces often sell fast, so the order is confirmed manually.
             </div>
           </aside>
 
-          <div className="min-w-0 flex-1">
-            <div className="mb-4 flex items-center justify-between gap-3">
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-10 rounded-[2px] border-[#b9945a] bg-white/80 text-xs font-extrabold uppercase tracking-[0.12em] lg:hidden"
-                onClick={() => setMobileFiltersOpen(true)}
-              >
-                <SlidersHorizontal className="h-4 w-4" />
-                Filters
-              </Button>
-            </div>
-
-            <FilterChips
-              filters={filters}
-              onChange={setFilters}
-              defaultPriceMin={range.min}
-              defaultPriceMax={range.max}
-            />
-
-            <SortBar sort={sort} onChange={setSort} count={filtered.length} />
-
+          <div>
+            <p className="mb-3 text-sm font-bold text-[#735f58]">
+              {filtered.length} {filtered.length === 1 ? "piece" : "pieces"} found
+            </p>
             {filtered.length === 0 ? (
-              <div className="border border-gold/25 bg-white py-16 text-center shadow-sm">
-                <p className="mb-4 text-maroon/70">No products match your filters.</p>
-                <Button variant="outline" className="rounded-none" onClick={() => setFilters(defaultFilters)}>
-                  Clear Filters
-                </Button>
+              <div className="summary-box py-12 text-center">
+                <p className="text-[#735f58]">No products match your search.</p>
+                <button className="btn-proto btn-outline-proto mx-auto mt-4" onClick={() => { setQuery(""); setActiveCategory("All"); }}>
+                  Clear filters
+                </button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
+              <div className="product-grid-proto">
                 {filtered.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
@@ -115,45 +130,14 @@ function ShopContent({ products }: ShopPageClientProps) {
             )}
           </div>
         </div>
-
-        {mobileFiltersOpen && (
-          <div className="fixed inset-0 z-50 lg:hidden">
-            <div
-              className="absolute inset-0 bg-black/55 backdrop-blur-sm"
-              onClick={() => setMobileFiltersOpen(false)}
-            />
-            <div className="absolute bottom-0 right-0 top-0 w-[88vw] max-w-sm overflow-y-auto bg-ivory shadow-2xl mobile-menu-panel">
-              <div className="flex items-center justify-between border-b border-gold/20 p-4">
-                <div>
-                  <h2 className="font-serif text-2xl text-[#8a1538]">Filters</h2>
-                  <p className="text-xs text-maroon/55">Find the perfect piece.</p>
-                </div>
-                <button onClick={() => setMobileFiltersOpen(false)} aria-label="Close filters">
-                  <X className="h-5 w-5 text-maroon" />
-                </button>
-              </div>
-              <div className="p-4">
-                <ProductFiltersPanel products={products} priceRange={range} filters={filters} onChange={setFilters} />
-              </div>
-              <div className="sticky bottom-0 border-t border-gold/20 bg-ivory p-4">
-                <Button
-                  variant="gold"
-                  className="w-full rounded-[2px] uppercase tracking-[0.14em]"
-                  onClick={() => setMobileFiltersOpen(false)}
-                >
-                  Show {filtered.length} Products
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+      </section>
+    </main>
   );
 }
 
 export function ShopPageClient({ products }: ShopPageClientProps) {
   return (
-    <Suspense fallback={<div className="py-20 text-center text-maroon">Loading...</div>}>
+    <Suspense fallback={<div className="section text-center text-maroon">Loading...</div>}>
       <ShopContent products={products} />
     </Suspense>
   );

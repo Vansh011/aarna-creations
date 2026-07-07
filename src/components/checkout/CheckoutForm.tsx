@@ -1,13 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
+import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { MessageCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { useCartStore } from "@/lib/cart-store";
 import { buildWhatsAppOrderUrl } from "@/lib/whatsapp-order";
 import { formatPrice } from "@/lib/utils";
@@ -30,27 +25,24 @@ export function CheckoutForm() {
   const validate = (): boolean => {
     const newErrors: Partial<CheckoutFormData> = {};
     if (!form.name.trim()) newErrors.name = "Name is required";
-    if (!form.phone.trim() || form.phone.length < 10)
+    if (!form.phone.trim() || form.phone.replace(/\D/g, "").length < 10) {
       newErrors.phone = "Valid phone number is required";
+    }
     if (!form.address.trim()) newErrors.address = "Address is required";
     if (!form.city.trim()) newErrors.city = "City is required";
-    if (!form.pincode.trim() || form.pincode.length < 6)
+    if (!form.pincode.trim() || form.pincode.replace(/\D/g, "").length < 6) {
       newErrors.pincode = "Valid PIN code is required";
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handlePlaceOrder = () => {
+  const handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
     if (!validate()) return;
 
-    const url = buildWhatsAppOrderUrl(
-      form,
-      items,
-      total,
-      window.location.origin
-    );
-
+    const url = buildWhatsAppOrderUrl(form, items, total, window.location.origin);
     window.open(url, "_blank");
   };
 
@@ -63,177 +55,77 @@ export function CheckoutForm() {
 
   if (items.length === 0) {
     return (
-      <div className="py-12 text-center sm:py-16">
-        <p className="text-maroon/70 text-lg mb-6">No items to checkout</p>
-        <Button variant="gold" asChild>
-          <Link href="/shop">Continue Shopping</Link>
-        </Button>
+      <div className="summary-box py-12 text-center">
+        <p className="font-serif text-3xl leading-none text-[#4b1020]">No items to checkout.</p>
+        <p className="mx-auto mt-3 max-w-md text-[#735f58]">Shortlist a piece first so the WhatsApp order has useful details.</p>
+        <Link className="btn-proto btn-primary-proto mx-auto mt-5" href="/shop">
+          Continue Shopping
+        </Link>
       </div>
     );
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
-      <div>
-        <h2 className="mb-5 font-serif text-2xl text-maroon sm:mb-6">
-          Delivery Details
-        </h2>
-        <div className="space-y-4">
-          <div>
-            <Label htmlFor="name">Full Name *</Label>
-            <Input
-              id="name"
-              value={form.name}
-              onChange={(e) => updateField("name", e.target.value)}
-              placeholder="Your full name"
-              className="mt-1.5"
-            />
-            {errors.name && (
-              <p className="text-red-500 text-xs mt-1">{errors.name}</p>
-            )}
-          </div>
-
-          <div>
-            <Label htmlFor="phone">Phone Number *</Label>
-            <Input
-              id="phone"
-              type="tel"
-              value={form.phone}
-              onChange={(e) => updateField("phone", e.target.value)}
-              placeholder="+91 XXXXX XXXXX"
-              className="mt-1.5"
-            />
-            {errors.phone && (
-              <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
-            )}
-          </div>
-
-          <div>
-            <Label htmlFor="address">Full Address *</Label>
-            <Textarea
-              id="address"
-              value={form.address}
-              onChange={(e) => updateField("address", e.target.value)}
-              placeholder="House no., street, landmark"
-              className="mt-1.5"
-            />
-            {errors.address && (
-              <p className="text-red-500 text-xs mt-1">{errors.address}</p>
-            )}
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div>
-              <Label htmlFor="city">City *</Label>
-              <Input
-                id="city"
-                value={form.city}
-                onChange={(e) => updateField("city", e.target.value)}
-                placeholder="City"
-                className="mt-1.5"
-              />
-              {errors.city && (
-                <p className="text-red-500 text-xs mt-1">{errors.city}</p>
-              )}
-            </div>
-            <div>
-              <Label htmlFor="pincode">PIN Code *</Label>
-              <Input
-                id="pincode"
-                value={form.pincode}
-                onChange={(e) => updateField("pincode", e.target.value)}
-                placeholder="302001"
-                className="mt-1.5"
-              />
-              {errors.pincode && (
-                <p className="text-red-500 text-xs mt-1">{errors.pincode}</p>
-              )}
-            </div>
-          </div>
-
-          <div>
-            <Label htmlFor="notes">Additional Notes (optional)</Label>
-            <Textarea
-              id="notes"
-              value={form.notes}
-              onChange={(e) => updateField("notes", e.target.value)}
-              placeholder="Any special instructions for your order"
-              className="mt-1.5"
-            />
-          </div>
+    <div className="checkout-layout">
+      <form className="form-grid" onSubmit={handleSubmit}>
+        <label>
+          Full name
+          <input value={form.name} onChange={(event) => updateField("name", event.target.value)} placeholder="Your name" />
+          {errors.name && <span className="text-sm text-red-600">{errors.name}</span>}
+        </label>
+        <label>
+          Phone number
+          <input value={form.phone} onChange={(event) => updateField("phone", event.target.value)} placeholder="+91 XXXXX XXXXX" />
+          {errors.phone && <span className="text-sm text-red-600">{errors.phone}</span>}
+        </label>
+        <label>
+          Address
+          <textarea value={form.address} onChange={(event) => updateField("address", event.target.value)} placeholder="House number, area, landmark" />
+          {errors.address && <span className="text-sm text-red-600">{errors.address}</span>}
+        </label>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <label>
+            City
+            <input value={form.city} onChange={(event) => updateField("city", event.target.value)} placeholder="City" />
+            {errors.city && <span className="text-sm text-red-600">{errors.city}</span>}
+          </label>
+          <label>
+            PIN code
+            <input value={form.pincode} onChange={(event) => updateField("pincode", event.target.value)} placeholder="452001" />
+            {errors.pincode && <span className="text-sm text-red-600">{errors.pincode}</span>}
+          </label>
         </div>
-      </div>
+        <label>
+          Fit notes
+          <textarea
+            value={form.notes}
+            onChange={(event) => updateField("notes", event.target.value)}
+            placeholder="Example: height 5'4, need relaxed fit, sleeve length adjustment"
+          />
+        </label>
+        <button type="submit" className="btn-proto btn-primary-proto">
+          <MessageCircle className="h-4 w-4" />
+          Open WhatsApp Order
+        </button>
+      </form>
 
-      <div>
-        <h2 className="mb-5 font-serif text-2xl text-maroon sm:mb-6">Order Review</h2>
-        <div className="space-y-4 rounded-[3px] border border-gold/10 bg-white p-4 shadow-sm sm:rounded-lg sm:p-6">
-          {items.map((item) => (
-            <div key={item.cartId} className="flex gap-3 border-b border-gold/10 pb-4 last:border-0 last:pb-0">
-              <div className="relative h-20 w-16 shrink-0 overflow-hidden rounded bg-cream">
-                <Image
-                  src={item.image}
-                  alt={item.name}
-                  fill
-                  className="object-cover"
-                  sizes="64px"
-                />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-medium text-maroon text-sm line-clamp-1">
-                  {item.name}
-                </p>
-                <p className="text-xs text-maroon/60">
-                  {item.size} | {item.color} | Qty: {item.quantity}
-                </p>
-                {item.customization && (
-                  <p className="text-xs text-maroon/50 line-clamp-1">
-                    {item.customization}
-                  </p>
-                )}
-              </div>
-              <p className="shrink-0 text-right text-xs font-semibold text-maroon sm:text-sm">
-                {formatPrice(item.price * item.quantity)}
-              </p>
-            </div>
-          ))}
-
-          <div className="gold-divider" />
-
-          <div className="flex justify-between text-lg font-semibold text-maroon">
-            <span>Total</span>
-            <span>{formatPrice(total)}</span>
+      <aside className="summary-box">
+        <h3 className="m-0 font-serif text-2xl leading-none text-[#4b1020]">Order preview</h3>
+        <p className="meta">
+          Hi AARNA CREATIONS, I want to order these pieces. Please confirm availability, size, final price, and shipping.
+        </p>
+        {items.map((item) => (
+          <div key={item.cartId} className="summary-line">
+            <span>{item.name}</span>
+            <strong>{item.size}</strong>
           </div>
-
-          <div className="rounded-[3px] bg-cream p-3 text-[13px] leading-6 text-maroon/70 sm:rounded-lg sm:p-4 sm:text-sm">
-            <p className="flex items-start gap-2">
-              <MessageCircle className="h-4 w-4 shrink-0 mt-0.5 text-emerald" />
-              Clicking &quot;Place Order&quot; will open WhatsApp with your order
-              details. Send the message to complete your order. Payment link will
-              be shared by Abha Maheshwari on WhatsApp.
-            </p>
-          </div>
-
-          <Button
-            variant="whatsapp"
-            size="lg"
-            className="h-12 w-full rounded-[2px] text-sm font-extrabold uppercase tracking-[0.08em] sm:text-base"
-            onClick={handlePlaceOrder}
-          >
-            <MessageCircle className="h-5 w-5" />
-            Place Order via WhatsApp
-          </Button>
-
-          <div className="flex justify-center">
-            <Image
-              src="/logo.png"
-              alt="AARNA CREATIONS"
-              width={120}
-              height={48}
-              className="h-10 w-auto opacity-60"
-            />
-          </div>
+        ))}
+        <div className="summary-line total">
+          <span>Estimated total</span>
+          <strong>{formatPrice(total)}</strong>
         </div>
-      </div>
+        <p className="meta">This keeps the owner-led boutique flow intact and reduces confused back-and-forth.</p>
+      </aside>
     </div>
   );
 }

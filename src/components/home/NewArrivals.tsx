@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { ProductCard } from "@/components/shop/ProductCard";
 import type { Product } from "@/types";
 
@@ -11,26 +10,21 @@ export function NewArrivals({ products }: NewArrivalsProps) {
   if (products.length === 0) return null;
 
   return (
-    <section className="relative overflow-hidden bg-[#fbf7ef] px-3 py-10 sm:px-6 lg:px-8 lg:py-14">
-      <div className="relative mx-auto max-w-6xl">
-        <div className="mb-7 text-center sm:mb-8">
-          <p className="ornate-title text-[#7a1026]">Freshly added</p>
-          <h2 className="section-subline mt-3">
-            Limited pieces, gone fast
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-
-        <div className="mt-7 text-center sm:mt-8">
-          <Link href="/shop?sort=newest" className="maroon-cta">
-            View arrivals <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
-        </div>
+    <section className="section">
+      <div className="section-head">
+        <span className="eyebrow">Just arrived</span>
+        <h2>Fresh pieces, handpicked this week.</h2>
+        <p>Show only a small, desirable preview on the home page, then move customers to the full shop.</p>
+      </div>
+      <div className="product-row">
+        {products.slice(0, 4).map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
+      <div className="mt-4">
+        <Link className="btn-proto btn-primary-proto" href="/shop">
+          View Full Collection
+        </Link>
       </div>
     </section>
   );

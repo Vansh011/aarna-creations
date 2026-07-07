@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { Ruler, X } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { useCartStore } from "@/lib/cart-store";
@@ -14,7 +13,6 @@ interface ProductOptionsProps {
 }
 
 export function ProductOptions({ product }: ProductOptionsProps) {
-  const router = useRouter();
   const addItem = useCartStore((state) => state.addItem);
   const [size, setSize] = useState<Size | "">(product.sizes[0] ?? "");
   const [customization, setCustomization] = useState("");
@@ -45,14 +43,10 @@ export function ProductOptions({ product }: ProductOptionsProps) {
     return true;
   };
 
-  const handleWhatsApp = () => {
-    if (handleAddToCart()) router.push("/checkout");
-  };
-
   return (
     <>
       <div className="detail-copy">
-        <span className="eyebrow">New arrival · limited piece</span>
+        <span className="eyebrow">New arrival - limited piece</span>
         <h1>{product.name}</h1>
         <div className="price text-[1.35rem]">
           {formatPrice(product.discountedPrice)}
@@ -68,15 +62,15 @@ export function ProductOptions({ product }: ProductOptionsProps) {
 
         <div className="detail-panel">
           <h3>Fabric and feel</h3>
-          <p>{product.fabricMaterial}. The piece is presented with clear fabric, size, color, and price details before WhatsApp confirmation.</p>
+          <p>{product.fabricMaterial}. The piece is presented with clear fabric, size, color, and price details before checkout.</p>
         </div>
 
         <div className="detail-panel">
           <h3>Why customers will understand it faster</h3>
           <ul>
-            <li>Price, fabric, sizes, and color are visible before WhatsApp.</li>
+            <li>Price, fabric, sizes, and color are visible before checkout.</li>
             <li>Trust text explains that availability and fitting are confirmed personally.</li>
-            <li>Sticky mobile CTA keeps Add to Cart and WhatsApp always reachable.</li>
+            <li>Cart and checkout keep the final WhatsApp order clean and complete.</li>
           </ul>
         </div>
 
@@ -121,18 +115,12 @@ export function ProductOptions({ product }: ProductOptionsProps) {
           <button type="button" className="btn-proto btn-primary-proto" onClick={handleAddToCart}>
             {added ? "Added to Cart" : "Add to Cart"}
           </button>
-          <button type="button" className="btn-proto btn-outline-proto" onClick={handleWhatsApp}>
-            Ask on WhatsApp
-          </button>
         </div>
       </div>
 
-      <div className="sticky-mobile-cta">
-        <button type="button" className="btn-proto btn-outline-proto" onClick={handleAddToCart}>
+      <div className="sticky-mobile-cta sticky-mobile-cta-single">
+        <button type="button" className="btn-proto btn-primary-proto" onClick={handleAddToCart}>
           {added ? "Added" : "Add to Cart"}
-        </button>
-        <button type="button" className="btn-proto btn-primary-proto" onClick={handleWhatsApp}>
-          WhatsApp
         </button>
       </div>
 

@@ -9,16 +9,17 @@ import { useCartStore } from "@/lib/cart-store";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/shop", label: "Shop" },
+  { href: "/shop?category=Kurtis", label: "Kurtis" },
+  { href: "/shop?category=Lehengas", label: "Lehngas" },
   { href: "/about", label: "Our Story" },
-  { href: "/checkout", label: "WhatsApp Order" },
 ];
 
 const tickerItems = [
-  "✨ Designer quality clothes",
-  "🚚 Free shipping on first order",
-  "🧵 Custom fitting guidance",
-  "💬 Order directly on WhatsApp",
-  "🌸 Curated with trust by Abha",
+  "Designer quality clothes",
+  "Free shipping on first order",
+  "Custom fitting guidance",
+  "Order directly on WhatsApp",
+  "Curated with trust by Abha",
 ];
 
 function BrandMark() {
@@ -63,7 +64,8 @@ export function Header() {
 
           <nav className="desktop-nav" aria-label="Main navigation">
             {navLinks.map((link) => {
-              const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
+              const baseHref = link.href.split("?")[0];
+              const active = link.href === "/" ? pathname === "/" : pathname === baseHref && !link.href.includes("?");
               return (
                 <Link key={link.href} href={link.href} className={active ? "active" : ""}>
                   {link.label}

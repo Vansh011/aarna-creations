@@ -2,19 +2,25 @@ import Image from "next/image";
 import Link from "next/link";
 
 const VISIT_ADDRESS = "AARNA CREATIONS Boutique, Indore, Madhya Pradesh. Full location shared on WhatsApp.";
+const DUMMY_MAP_LINK = "https://www.google.com/maps";
 
 export function BrandStory() {
+  const whatsapp = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "91XXXXXXXXXX").replace(/\D/g, "");
+  const appointmentMessage = encodeURIComponent(
+    "Hi AARNA CREATIONS, I would like to book an appointment to visit the boutique. Please suggest a suitable timing."
+  );
+
   return (
     <>
       <section className="cta-band">
-        <div className="section">
+        <div className="section cta-band-inner">
           <div>
             <span className="eyebrow">WhatsApp ordering</span>
             <h2>Shortlist here. Confirm personally.</h2>
           </div>
           <p>No payment gateway pressure. The owner confirms availability, fitting, shipping, and payment manually on WhatsApp.</p>
-          <Link className="btn-proto btn-outline-proto" href="/checkout">
-            Start Order
+          <Link className="btn-proto btn-outline-proto" href="/shop">
+            Start Ordering
           </Link>
         </div>
       </section>
@@ -30,9 +36,19 @@ export function BrandStory() {
             <p>
               <strong>Hours:</strong> 11 AM to 7 PM, by appointment.
             </p>
-            <Link className="btn-proto btn-primary-proto mt-4" href="/checkout">
-              Ask for Location
-            </Link>
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <a className="btn-proto btn-primary-proto" href={DUMMY_MAP_LINK} target="_blank" rel="noopener noreferrer">
+                Google Map
+              </a>
+              <a
+                className="btn-proto btn-outline-proto"
+                href={"https://wa.me/" + whatsapp + "?text=" + appointmentMessage}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Book an Appointment
+              </a>
+            </div>
           </div>
           <div className="owner-card">
             <Image

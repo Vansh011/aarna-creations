@@ -1,4 +1,6 @@
 import { Hero } from "@/components/home/Hero";
+import { SaleBanner } from "@/components/home/SaleBanner";
+import { TrustStrip } from "@/components/home/TrustStrip";
 import { BoutiqueService } from "@/components/home/BoutiqueService";
 import { FeaturedCollections } from "@/components/home/FeaturedCollections";
 import { NewArrivals } from "@/components/home/NewArrivals";
@@ -16,9 +18,11 @@ export default async function HomePage() {
   return (
     <>
       <Hero />
-      <BoutiqueService />
+      <SaleBanner />
+      <TrustStrip />
       <FeaturedCollections />
       <NewArrivals products={newArrivals} />
+      <BoutiqueService />
       <BrandStory />
     </>
   );

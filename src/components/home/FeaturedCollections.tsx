@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 const collections = [
   {
@@ -37,9 +38,9 @@ const collections = [
 
 export function FeaturedCollections() {
   return (
-    <section className="section">
+    <section id="collections" className="section">
       <div className="section-head">
-        <span className="eyebrow">Shop by category</span>
+        <span className="eyebrow">Our collections</span>
         <h2>Choose by occasion, not confusion.</h2>
         <p>Quick mobile-first cards help customers jump straight into the style they came for.</p>
       </div>
@@ -60,6 +61,9 @@ export function FeaturedCollections() {
             <span className="category-label">
               <strong>{collection.name}</strong>
               <span>{collection.subtitle}</span>
+              <span className="category-discover">
+                Discover <ArrowRight className="h-4 w-4" />
+              </span>
             </span>
           </Link>
         ))}

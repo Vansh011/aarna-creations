@@ -105,9 +105,6 @@ function ShopContent({ products }: ShopPageClientProps) {
                 </button>
               ))}
             </div>
-            <div className="shop-note">
-              Tip: Ask Abha on WhatsApp if you are between sizes. Boutique pieces often sell fast, so the order is confirmed manually.
-            </div>
           </aside>
 
           <div>

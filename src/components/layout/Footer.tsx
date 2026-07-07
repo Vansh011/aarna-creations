@@ -1,8 +1,13 @@
 import Link from "next/link";
-import { MessageCircle, Youtube } from "lucide-react";
+import { CalendarCheck, MapPin, Store, Youtube } from "lucide-react";
+
+const DUMMY_MAP_LINK = "https://www.google.com/maps";
 
 export function Footer() {
-  const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "91XXXXXXXXXX";
+  const whatsapp = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "91XXXXXXXXXX").replace(/\D/g, "");
+  const appointmentMessage = encodeURIComponent(
+    "Hi AARNA CREATIONS, I would like to book an appointment to visit the boutique. Please suggest a suitable timing."
+  );
 
   return (
     <footer className="footer">
@@ -27,15 +32,25 @@ export function Footer() {
             </a>
           </div>
         </div>
-        <a
-          className="btn-proto btn-outline-proto"
-          href={"https://wa.me/" + whatsapp.replace(/\D/g, "")}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <MessageCircle className="h-4 w-4" />
-          Order on WhatsApp
-        </a>
+        <div className="footer-actions">
+          <Link className="btn-proto btn-outline-proto" href="/shop">
+            <Store className="h-4 w-4" />
+            Store
+          </Link>
+          <a className="btn-proto btn-outline-proto" href={DUMMY_MAP_LINK} target="_blank" rel="noopener noreferrer">
+            <MapPin className="h-4 w-4" />
+            Location
+          </a>
+          <a
+            className="btn-proto btn-outline-proto"
+            href={"https://wa.me/" + whatsapp + "?text=" + appointmentMessage}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <CalendarCheck className="h-4 w-4" />
+            Book Appointment
+          </a>
+        </div>
       </div>
     </footer>
   );

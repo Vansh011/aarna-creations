@@ -21,7 +21,7 @@ export function NewArrivals({ products }: NewArrivalsProps) {
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
-      <div className="mt-4">
+      <div className="mt-5 text-center">
         <Link className="btn-proto btn-primary-proto" href="/shop">
           View Full Collection
         </Link>

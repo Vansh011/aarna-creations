@@ -177,9 +177,9 @@ img {
 .desktop-nav {
   display: none;
   align-items: center;
-  gap: 1rem;
+  gap: 1.45rem;
   color: var(--maroon-deep);
-  font-size: 0.9rem;
+  font-size: 1.02rem;
   font-weight: 750;
 }
 
@@ -366,11 +366,70 @@ img {
   font-size: 1.35rem;
 }
 
+.sale-banner {
+  position: relative;
+  display: grid;
+  min-height: 280px;
+  align-content: center;
+  gap: 0.35rem;
+  overflow: hidden;
+  border: 1px solid rgba(183, 138, 57, 0.42);
+  padding: 2rem;
+  color: #fffaf1;
+  background:
+    linear-gradient(90deg, rgba(34, 8, 12, 0.9), rgba(75, 16, 32, 0.56), rgba(39, 22, 24, 0.16)),
+    url("/aarna-redesign/sale-banner.png");
+  background-position: center;
+  background-size: cover;
+  box-shadow: var(--shadow);
+}
+
+.sale-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 26% 44%, rgba(232, 201, 137, 0.22), transparent 18rem);
+  pointer-events: none;
+}
+
+.sale-banner > * {
+  position: relative;
+  z-index: 1;
+}
+
+.sale-banner-kicker {
+  width: fit-content;
+  border: 1px solid rgba(232, 201, 137, 0.5);
+  background: rgba(255, 250, 241, 0.12);
+  padding: 0.38rem 0.62rem;
+  font-size: 0.74rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.sale-banner strong {
+  font-family: var(--serif);
+  max-width: 9ch;
+  font-size: clamp(3rem, 10vw, 7.4rem);
+  font-weight: 900;
+  line-height: 0.84;
+  letter-spacing: 0.02em;
+  text-wrap: balance;
+}
+
+.sale-banner span:last-child {
+  font-family: var(--serif);
+  font-size: clamp(1.5rem, 4.5vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--gold-soft);
+}
+
 .trust-strip {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.7rem;
-  margin-top: -1.7rem;
+  margin-top: 0;
   position: relative;
   z-index: 5;
 }
@@ -539,6 +598,19 @@ img {
   font-size: 0.82rem;
 }
 
+.category-discover {
+  display: inline-flex !important;
+  width: fit-content;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.8rem !important;
+  color: #fffaf1 !important;
+  font-size: 0.76rem !important;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .product-row,
 .product-grid-proto {
   display: grid;
@@ -654,7 +726,7 @@ img {
 
 .cta-band .section {
   display: grid;
-  gap: 1rem;
+  gap: 1.25rem;
   padding-top: 2.4rem;
   padding-bottom: 2.4rem;
 }
@@ -669,6 +741,10 @@ img {
 .cta-band p {
   margin: 0;
   color: rgba(255, 250, 241, 0.82);
+}
+
+.cta-band-inner .btn-proto {
+  width: fit-content;
 }
 
 .visit-about {
@@ -730,6 +806,12 @@ img {
   gap: 1rem;
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+
+.footer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
 }
 
 .footer p {
@@ -877,6 +959,10 @@ img {
   backdrop-filter: blur(12px);
 }
 
+.sticky-mobile-cta-single {
+  grid-template-columns: 1fr;
+}
+
 .form-grid,
 .cart-list {
   display: grid;
@@ -1007,7 +1093,16 @@ img {
 
   .trust-strip {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    margin-top: -2.1rem;
+    margin-top: 0;
+  }
+
+  .cta-band-inner {
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.75fr) auto;
+    align-items: center;
+  }
+
+  .cta-band-inner .btn-proto {
+    justify-self: end;
   }
 
   .service-grid {

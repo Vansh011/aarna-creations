@@ -6,9 +6,9 @@ export function Hero() {
       <div className="hero-content">
         <span className="hero-kicker">Est. home boutique</span>
         <h1 className="hero-title">
-          AARNA CREATIONS <span className="hero-byline" style={{ fontSize: '3.2rem'}}>by Abha Maheshwari</span>
+          AARNA CREATIONS <span className="hero-byline" style={{ fontSize: '2rem'}}>by Abha Maheshwari</span>
         </h1>
-        <p className="hero-copy" style={{ fontSize: '1.6rem' }}>
+        <p className="hero-copy" style={{ fontSize: '1.2rem' }}>
           Choose what you Feel. Grace in Every Thread. Curated with Trust. 
         </p>
         <div className="hero-actions">

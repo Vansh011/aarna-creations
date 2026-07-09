@@ -10,9 +10,9 @@ export default function CheckoutPage() {
     <main className="section">
       <div className="section-head">
         <span className="eyebrow">Final step</span>
-        <h1 className="page-title">Place your order on WhatsApp.</h1>
+        <h1 className="page-title">One step away.</h1>
         <p>
-          Fill your details once. We will open WhatsApp with your complete order message already written, so you only need to review it and press Send.
+          Share only your name, city, and any fit note. Then continue to WhatsApp with your order message already prepared.
         </p>
       </div>
       <CheckoutForm />

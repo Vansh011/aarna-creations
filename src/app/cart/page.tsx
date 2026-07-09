@@ -10,9 +10,9 @@ export default function CartPage() {
     <main className="section">
       <div className="section-head">
         <span className="eyebrow">Your shortlist</span>
-        <h1 className="page-title">Review your pieces before WhatsApp.</h1>
+        <h1 className="page-title">Your boutique shortlist.</h1>
         <p>
-          Check sizes and quantities here. At checkout, the website prepares one ready-to-send WhatsApp message with your order and delivery details.
+          Review your selected pieces, adjust quantity, then move to the final step when everything feels right.
         </p>
       </div>
       <CartItemList />

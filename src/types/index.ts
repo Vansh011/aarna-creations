@@ -62,10 +62,7 @@ export interface CartItem {
 
 export interface CheckoutFormData {
   name: string;
-  phone: string;
-  address: string;
   city: string;
-  pincode: string;
   notes: string;
 }
 

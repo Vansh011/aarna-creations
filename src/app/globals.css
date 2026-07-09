@@ -1028,9 +1028,93 @@ img {
   font-family: var(--serif);
 }
 
+.cart-item-tag {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 0.35rem;
+  border: 1px solid rgba(183, 138, 57, 0.34);
+  background: #f8efdf;
+  padding: 0.18rem 0.42rem;
+  color: var(--maroon);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .summary-box {
   display: grid;
   gap: 0.55rem;
+}
+
+.cart-summary,
+.checkout-form-card,
+.checkout-summary {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(183, 138, 57, 0.28);
+  border-color: rgba(183, 138, 57, 0.28);
+  background: #fffaf1;
+  padding: 1rem;
+  box-shadow: 0 18px 45px rgba(75, 16, 32, 0.08);
+}
+
+.cart-summary::before,
+.checkout-form-card::before,
+.checkout-summary::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(90deg, var(--maroon), var(--gold));
+}
+
+.cart-summary h3,
+.checkout-summary h3,
+.checkout-intro h2 {
+  margin: 0;
+  color: var(--maroon-deep);
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 7vw, 2.7rem);
+  line-height: 0.95;
+}
+
+.checkout-intro {
+  display: grid;
+  gap: 0.45rem;
+  border: 1px solid rgba(183, 138, 57, 0.28);
+  background:
+    linear-gradient(135deg, rgba(255, 250, 241, 0.92), rgba(248, 239, 223, 0.82)),
+    url("/aarna-redesign/category-suit-sets.webp");
+  background-position: center;
+  background-size: cover;
+  padding: 1rem;
+}
+
+.checkout-intro p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.cart-perks {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.cart-perks span {
+  border: 1px solid rgba(111, 29, 47, 0.12);
+  background: #f8efdf;
+  padding: 0.5rem 0.65rem;
+  color: var(--maroon-deep);
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+.checkout-preview-list {
+  display: grid;
+  gap: 0.45rem;
+  border-block: 1px solid rgba(111, 29, 47, 0.1);
+  padding-block: 0.7rem;
 }
 
 .summary-line {
@@ -1056,6 +1140,46 @@ img {
 .checkout-steps > div {
   display: grid;
   gap: 0.18rem;
+}
+
+.checkout-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  background: rgba(42, 17, 21, 0.58);
+  padding: 1rem;
+  backdrop-filter: blur(8px);
+}
+
+.checkout-modal {
+  display: grid;
+  width: min(100%, 420px);
+  gap: 0.75rem;
+  border: 1px solid rgba(183, 138, 57, 0.44);
+  background: #fffaf1;
+  padding: 1.1rem;
+  box-shadow: 0 30px 80px rgba(42, 17, 21, 0.28);
+}
+
+.checkout-modal h2 {
+  margin: 0;
+  color: var(--maroon-deep);
+  font-family: var(--serif);
+  font-size: clamp(2rem, 9vw, 3rem);
+  line-height: 0.95;
+}
+
+.checkout-modal p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.checkout-modal-actions {
+  display: grid;
+  gap: 0.6rem;
 }
 
 .owner-story {

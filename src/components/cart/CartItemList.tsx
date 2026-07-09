@@ -46,6 +46,7 @@ export function CartItemList() {
                   <Trash2 className="h-4 w-4" />
                 </button>
               </div>
+              <span className="cart-item-tag">Selected piece</span>
               <p className="meta mt-1">
                 Size {item.size} | Color {item.color}
                 {item.customization ? " | " + item.customization : ""}
@@ -76,7 +77,10 @@ export function CartItemList() {
         ))}
       </div>
 
-      <aside className="summary-box">
+      <aside className="summary-box cart-summary">
+        <span className="eyebrow">Almost there</span>
+        <h3>Your pieces are saved.</h3>
+        <p className="meta">Move to the final step for name, city, and optional fit notes. No payment is taken on the website.</p>
         <div className="summary-line">
           <span>Subtotal</span>
           <strong>{formatPrice(total)}</strong>
@@ -89,15 +93,17 @@ export function CartItemList() {
           <span>Estimated total</span>
           <strong>{formatPrice(total)}</strong>
         </div>
-        <Link className="btn-proto btn-primary-proto" href="/checkout">
-          Continue to Checkout
-        </Link>
-        <div className="process-note">
-          <strong>What happens next?</strong>
-          <span>
-            Checkout will collect your details and prepare one complete WhatsApp message. WhatsApp opens with the message already written, then you review it and tap Send.
-          </span>
+        <div className="cart-perks">
+          <span>Personal confirmation</span>
+          <span>Fit notes supported</span>
+          <span>Final payment on WhatsApp</span>
         </div>
+        <Link className="btn-proto btn-primary-proto" href="/checkout">
+          Go To Final Step
+        </Link>
+        <Link className="btn-proto btn-outline-proto" href="/shop">
+          Add More Pieces
+        </Link>
       </aside>
     </div>
   );

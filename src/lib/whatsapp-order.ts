@@ -10,15 +10,12 @@ export function buildWhatsAppOrderUrl(
   const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "91XXXXXXXXXX";
 
   const lines = [
-    "*New Order — AARNA CREATIONS*",
+    "*New Order - AARNA CREATIONS*",
     "",
     "*Customer:*",
     `Name: ${customer.name}`,
-    `Phone: ${customer.phone}`,
-    `Address: ${customer.address}`,
     `City: ${customer.city}`,
-    `PIN: ${customer.pincode}`,
-    customer.notes ? `Notes: ${customer.notes}` : "",
+    customer.notes ? `Fit notes: ${customer.notes}` : "",
     "",
     "*Items:*",
     ...items.map((item, index) => {
@@ -35,7 +32,7 @@ export function buildWhatsAppOrderUrl(
     `*Order Total: ${formatPrice(total)}*`,
     "",
     "Placed via AARNA CREATIONS website",
-  ].filter((line) => line !== undefined);
+  ].filter(Boolean);
 
   const text = encodeURIComponent(lines.join("\n"));
   const cleanPhone = phone.replace(/\D/g, "");

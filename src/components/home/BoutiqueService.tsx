@@ -1,10 +1,10 @@
 import Image from "next/image";
 
 const points = [
-  ["Quality checked", "Fabric and embroidery reviewed before dispatch."],
-  ["Size guidance", "Share measurements and get a practical fit suggestion."],
-  ["Limited pieces", "Curated drops, fewer repeats, more uniqueness."],
-  ["WhatsApp first", "Availability, payment, and delivery confirmed personally."],
+  ["🪡 Quality checked", "Fabric and embroidery reviewed before dispatch."],
+  ["📏 Size guidance", "Share measurements and get a practical fit suggestion."],
+  ["✨ Limited pieces", "Curated drops, fewer repeats, more uniqueness."],
+  ["💬 WhatsApp first", "Availability, payment, and delivery confirmed personally."],
 ];
 
 export function BoutiqueService() {

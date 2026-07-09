@@ -105,7 +105,7 @@ export function CheckoutForm() {
         </label>
         <button type="submit" className="btn-proto btn-primary-proto">
           <MessageCircle className="h-4 w-4" />
-          Open WhatsApp Order
+          Open WhatsApp With Order Text
         </button>
       </form>
 
@@ -114,6 +114,20 @@ export function CheckoutForm() {
         <p className="meta">
           Hi AARNA CREATIONS, I want to order these pieces. Please confirm availability, size, final price, and shipping.
         </p>
+        <div className="checkout-steps">
+          <div>
+            <strong>1. Details</strong>
+            <span>You add your contact, address, and fit notes here.</span>
+          </div>
+          <div>
+            <strong>2. WhatsApp opens</strong>
+            <span>Your full order message is automatically typed inside WhatsApp.</span>
+          </div>
+          <div>
+            <strong>3. Tap Send</strong>
+            <span>WhatsApp keeps you in control, so the final send button must be pressed by you.</span>
+          </div>
+        </div>
         {items.map((item) => (
           <div key={item.cartId} className="summary-line">
             <span>{item.name}</span>
@@ -124,7 +138,7 @@ export function CheckoutForm() {
           <span>Estimated total</span>
           <strong>{formatPrice(total)}</strong>
         </div>
-        <p className="meta">This keeps the owner-led boutique flow intact and reduces confused back-and-forth.</p>
+        <p className="meta">Final availability, shipping, and payment are confirmed personally by the boutique on WhatsApp.</p>
       </aside>
     </div>
   );

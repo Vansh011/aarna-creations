@@ -1,8 +1,8 @@
 const trustItems = [
-  ["Dispatch", "24-hour dispatch", "Fast packing for ready pieces."],
-  ["Returns", "Easy returns help", "Guidance for size or quality issues."],
-  ["WhatsApp", "Instant in-store feel", "Ask on WhatsApp before buying."],
-  ["Fit", "Custom fitting", "Measurement help before order."],
+  ["🚚", "24-hour dispatch", "Fast packing for ready pieces."],
+  ["↩️", "Easy returns help", "Guidance for size or quality issues."],
+  ["📱", "Instant in-store feel", "Ask on WhatsApp before buying."],
+  ["🧵", "Custom fitting", "Measurement help before order."],
 ];
 
 export function TrustStrip() {

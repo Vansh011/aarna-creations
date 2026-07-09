@@ -13,7 +13,7 @@ export default async function HomePage() {
   const products = await getLiveProducts();
   const newArrivals = [...products]
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    .slice(0, 6);
+    .slice(0, 10);
 
   return (
     <>

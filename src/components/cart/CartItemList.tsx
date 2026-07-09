@@ -47,8 +47,8 @@ export function CartItemList() {
                 </button>
               </div>
               <p className="meta mt-1">
-                Size {item.size} · Color {item.color}
-                {item.customization ? " · " + item.customization : ""}
+                Size {item.size} | Color {item.color}
+                {item.customization ? " | " + item.customization : ""}
               </p>
               <div className="price mt-2">{formatPrice(item.price)}</div>
               <div className="chips mt-3">
@@ -82,10 +82,6 @@ export function CartItemList() {
           <strong>{formatPrice(total)}</strong>
         </div>
         <div className="summary-line">
-          <span>First order discount</span>
-          <strong>Mention FIRSTAARNA</strong>
-        </div>
-        <div className="summary-line">
           <span>Shipping</span>
           <strong>Confirm on WhatsApp</strong>
         </div>
@@ -96,7 +92,12 @@ export function CartItemList() {
         <Link className="btn-proto btn-primary-proto" href="/checkout">
           Continue to Checkout
         </Link>
-        <p className="meta">Final amount, availability, and shipping are confirmed by Abha on WhatsApp.</p>
+        <div className="process-note">
+          <strong>What happens next?</strong>
+          <span>
+            Checkout will collect your details and prepare one complete WhatsApp message. WhatsApp opens with the message already written, then you review it and tap Send.
+          </span>
+        </div>
       </aside>
     </div>
   );

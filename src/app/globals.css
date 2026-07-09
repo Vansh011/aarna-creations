@@ -617,6 +617,36 @@ img {
   gap: 0.9rem;
 }
 
+.product-row {
+  display: flex;
+  gap: 0.78rem;
+  margin-inline: calc(var(--page-pad) * -1);
+  overflow-x: auto;
+  padding: 0.1rem var(--page-pad) 0.9rem;
+  scroll-padding-inline: var(--page-pad);
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.product-row::-webkit-scrollbar {
+  display: none;
+}
+
+.product-row > * {
+  flex: 0 0 min(70vw, 250px);
+  scroll-snap-align: start;
+}
+
+.arrival-scroll-hint {
+  display: block;
+  margin: -0.35rem 0 0.8rem;
+  color: var(--maroon);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .product-grid-proto {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -1016,6 +1046,18 @@ img {
   font-weight: 900;
 }
 
+.process-note,
+.checkout-steps {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.85rem;
+}
+
+.checkout-steps > div {
+  display: grid;
+  gap: 0.18rem;
+}
+
 .owner-story {
   display: grid;
   gap: 1rem;
@@ -1024,6 +1066,106 @@ img {
 .story-img {
   overflow: hidden;
   border: 1px solid var(--line);
+}
+
+.story-values {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.story-value-card,
+.story-gallery-card,
+.about-closing,
+.process-note,
+.checkout-steps {
+  border: 1px solid var(--line);
+  background: #fffaf1;
+  box-shadow: 0 12px 32px rgba(75, 16, 32, 0.06);
+}
+
+.story-value-card {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem;
+}
+
+.story-value-card strong,
+.story-gallery-card strong,
+.checkout-steps strong,
+.process-note strong {
+  color: var(--maroon-deep);
+  font-family: var(--serif);
+  font-size: 1.18rem;
+  line-height: 1.05;
+}
+
+.story-value-card span,
+.story-gallery-card span,
+.process-note span,
+.checkout-steps span {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.story-gallery {
+  display: flex;
+  gap: 0.8rem;
+  margin-inline: calc(var(--page-pad) * -1);
+  overflow-x: auto;
+  padding: 0.1rem var(--page-pad) 0.9rem;
+  scroll-padding-inline: var(--page-pad);
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.story-gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.story-gallery-card {
+  flex: 0 0 min(78vw, 300px);
+  margin: 0;
+  overflow: hidden;
+  scroll-snap-align: start;
+}
+
+.story-gallery-card img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.story-gallery-card figcaption {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.9rem;
+}
+
+.about-closing {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+  padding: 1.2rem;
+  background:
+    linear-gradient(90deg, rgba(255, 250, 241, 0.94), rgba(255, 250, 241, 0.78)),
+    url("/aarna-redesign/hero-boutique.webp");
+  background-position: center;
+  background-size: cover;
+}
+
+.about-closing h2 {
+  margin: 0;
+  color: var(--maroon-deep);
+  font-family: var(--serif);
+  font-size: clamp(2rem, 8vw, 3.6rem);
+  line-height: 0.95;
+}
+
+.about-closing p {
+  max-width: 38rem;
+  margin: 0;
+  color: var(--muted);
 }
 
 .hide {
@@ -1119,7 +1261,20 @@ img {
   }
 
   .product-row {
+    display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-inline: 0;
+    overflow: visible;
+    padding: 0;
+    scroll-snap-type: none;
+  }
+
+  .product-row > * {
+    flex: initial;
+  }
+
+  .arrival-scroll-hint {
+    display: none;
   }
 
   .product-grid-proto {
@@ -1169,6 +1324,23 @@ img {
     grid-template-columns: 1.2fr 0.8fr;
     gap: 1rem;
     align-items: start;
+  }
+
+  .story-values {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .story-gallery {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-inline: 0;
+    overflow: visible;
+    padding: 0;
+    scroll-snap-type: none;
+  }
+
+  .story-gallery-card {
+    flex: initial;
   }
 }
 

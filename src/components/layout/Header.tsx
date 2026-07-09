@@ -15,11 +15,11 @@ const navLinks = [
 ];
 
 const tickerItems = [
-  "Designer quality clothes",
-  "Free shipping on first order",
-  "Custom fitting guidance",
-  "Order directly on WhatsApp",
-  "Curated with trust by Abha",
+  "✨ Designer quality clothes",
+  "🚚 Free shipping on first order",
+  "🧵 Custom fitting guidance",
+  "💬 Order directly on WhatsApp",
+  "🌸 Curated with trust by Abha",
 ];
 
 function BrandMark() {

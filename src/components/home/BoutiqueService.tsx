@@ -13,7 +13,7 @@ export function BoutiqueService() {
       <div className="service-grid">
         <div className="service-photo">
           <Image
-            src="/aarna-redesign/service-curation.webp"
+            src="/aarna-redesign/service-curation-re.png"
             alt="Boutique hands arranging embroidered ethnic wear for dispatch"
             fill
             className="object-cover"

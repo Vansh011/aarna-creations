@@ -107,11 +107,14 @@ export function CheckoutForm() {
           <p className="meta">Your selected pieces will be sent to AARNA CREATIONS as one clean WhatsApp message.</p>
           <div className="checkout-preview-list">
             {items.map((item) => (
-              <div key={item.cartId} className="summary-line">
-                <span>
-                  {item.quantity} x {item.name}
-                </span>
-                <strong>{item.size}</strong>
+              <div key={item.cartId} className="checkout-preview-item">
+                <div>
+                  <strong>{item.name}</strong>
+                  <span>
+                    Size {item.size} | Qty {item.quantity} | {formatPrice(item.price)} each
+                  </span>
+                </div>
+                <strong>{formatPrice(item.price * item.quantity)}</strong>
               </div>
             ))}
           </div>

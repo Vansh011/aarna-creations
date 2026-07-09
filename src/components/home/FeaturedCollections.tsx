@@ -42,7 +42,6 @@ export function FeaturedCollections() {
       <div className="section-head">
         <span className="eyebrow">Our collections</span>
         <h2>Choose by occasion, not confusion.</h2>
-        <p>Quick mobile-first cards help customers jump straight into the style they came for.</p>
       </div>
       <div className="category-grid">
         {collections.map((collection) => (

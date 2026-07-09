@@ -14,7 +14,6 @@ export function NewArrivals({ products }: NewArrivalsProps) {
       <div className="section-head">
         <span className="eyebrow">Just arrived</span>
         <h2>Fresh pieces, handpicked this week.</h2>
-        <p>Swipe through the latest pieces, then open the full collection when something feels like you.</p>
       </div>
       <p className="arrival-scroll-hint">Swipe to see more ✨</p>
       <div className="product-row">

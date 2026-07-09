@@ -15,7 +15,7 @@ const storyValues = [
 
 const galleryImages = [
   {
-    src: "/aarna-redesign/service-curation.webp",
+    src: "/aarna-redesign/service-curation-re.png",
     alt: "Curated ethnic wear being prepared for boutique customers",
     title: "Curated by hand",
     text: "Fabric, fall and finishing are checked before a piece reaches the customer.",

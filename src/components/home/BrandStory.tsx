@@ -15,10 +15,10 @@ export function BrandStory() {
       <section className="cta-band">
         <div className="section cta-band-inner">
           <div>
-            <span className="eyebrow">WhatsApp ordering</span>
-            <h2>Shortlist here. Confirm personally.</h2>
+            <span className="eyebrow mb-2">WhatsApp ordering</span>
+            <h2 className="mt-2">Shortlist here. Confirm personally.</h2>
           </div>
-          <p>No payment gateway pressure. The owner confirms availability, fitting, shipping, and payment manually on WhatsApp.</p>
+          <p>Select first, then get in touch with us on WhatsApp and pay only after you are satisfied and the piece is customised.</p>
           <Link className="btn-proto btn-outline-proto" href="/shop">
             Start Ordering
           </Link>

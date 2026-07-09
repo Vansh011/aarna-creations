@@ -61,9 +61,6 @@ function ShopContent({ products }: ShopPageClientProps) {
         <div className="section">
           <span className="eyebrow">Full collection</span>
           <h1 className="page-title">Boutique pieces that feel selected for you.</h1>
-          <p>
-            Use simple filters, then open any piece to see fabric, sizes, color, and WhatsApp-ready ordering. This page is designed for fast mobile browsing from Instagram traffic.
-          </p>
         </div>
       </section>
 

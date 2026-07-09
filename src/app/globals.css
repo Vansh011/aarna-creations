@@ -155,14 +155,12 @@ img {
   min-width: 0;
 }
 
-.brand-mark {
-  width: 42px;
-  height: 42px;
-  flex: 0 0 42px;
-  border: 1px solid rgba(111, 29, 47, 0.2);
-  background: #fffaf1;
-  display: grid;
-  place-items: center;
+.brand-logo {
+  display: block;
+  width: clamp(42px, 10vw, 58px);
+  height: auto;
+  flex: 0 0 auto;
+  object-fit: contain;
 }
 
 .brand-title {
